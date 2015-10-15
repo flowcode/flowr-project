@@ -1,0 +1,35 @@
+{
+    "name" : "flowcode/projectbundle",
+    "description" : "project bundle",
+    "type" : "symfony-bundle",
+    "authors" : [{
+        "name" : "Francisco Memoli",
+        "email" : "fmemoli@flowcode.com.ar"
+    },
+    {
+        "name" : "Juan Manuel Agüero",
+        "email" : "jaguero@flowcode.com.ar"
+    }],
+    "keywords" : [
+        "project bundle"
+    ],
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+        "friendsofsymfony/project-bundle": "~2.0@dev"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "Flowcode\\ProjectBundle" : ""
+        }
+    },
+    "target-dir" : "Flowcode/ProjectBundle",
+    "repositories" : [{
+    }],
+    "extra" : {
+    "branch-alias" : {
+            "dev-master" : "1.0.0-dev"
+        }
+    }
+}

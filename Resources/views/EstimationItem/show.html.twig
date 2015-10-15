@@ -1,0 +1,83 @@
+{% extends "FlowerCoreBundle::layout.html.twig" %}
+
+{% block title %}EstimationItem - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <h1>{{ 'EstimationItem' | trans({}, 'EstimationItem')}}</h1>
+        <ol class="breadcrumb">
+            <li><a href={{ path('dashboard') }}><i class="fa fa-dashboard"></i> {{"Dashboard" | trans({}, 'EstimationItem')}}</a></li>
+            <li><a href="{{ path('estimationitem') }}"> {{ '%entity% list'|trans({'%entity%': 'EstimationItem'}, 'EstimationItem') }}</a></li>
+            <li class="active" >{{ '%entity%'|trans({'%entity%': 'EstimationItem'}, 'EstimationItem') }}</li>
+        </ol>
+    </section>
+    <section class="content">    
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"></h3>                            </div>
+            <div class="box-body">
+                <table class="table table-hover record_properties">
+                    <tbody>
+                        <tr>
+                            <th scope="row">{{'Id'|trans({}, 'EstimationItem')}}</th>
+                            <td>{{ estimationitem.id }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{{'Name'|trans({}, 'EstimationItem')}}</th>
+                            <td>{{ estimationitem.name }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{{'Description'|trans({}, 'EstimationItem')}}</th>
+                            <td>{{ estimationitem.description }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{{'Optimistic'|trans({}, 'EstimationItem')}}</th>
+                            <td>{{ estimationitem.optimistic }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">{{'Pesimistic'|trans({}, 'EstimationItem')}}</th>
+                            <td>{{ estimationitem.pesimistic }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer">
+            {{ form_start(delete_form) }}
+        {{ form_widget(delete_form) }}
+
+        <div class="btn-group record_actions">
+
+            <a class="btn btn-primary" href="{{ path('estimationitem_edit', {id: estimationitem.id}) }}">
+                <i class="fa fa-edit"></i> {{ 'Edit'|trans({}, 'EstimationItem') }}
+            </a>
+            <button class="btn btn-danger" type="submit"><i class="fa fa-trash-o"></i> {{ 'Delete'|trans({}, 'EstimationItem') }}</button>
+
+        </div>
+
+        <input name="modal" type="hidden" value="0">
+    {{ form_end(delete_form) }}
+
+    <div id="delete_confirm" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3>{{ 'Confirm delete'|trans({}, 'EstimationItem') }}</h3>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'You are about to delete an item'|trans({}, 'EstimationItem') }}, {{ 'this procedure is irreversible'|trans({}, 'EstimationItem') }}.</p>
+                    <p>{{ 'Do you want to proceed?'|trans({}, 'EstimationItem') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger">{{ 'Yes'|trans({}, 'EstimationItem') }}</button>
+                    <button class="btn btn-default" data-dismiss="modal">{{ 'No'|trans({}, 'EstimationItem') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    
+    </section>
+
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "FlowerCoreBundle::layout.html.twig" %}
+
+{% block title %}Project - {{ parent() }}{% endblock %}
+
+{% block body %}
+    {{ include("FlowerCoreBundle:Project:header.html.twig", { 'project': project }) }}
+    <section class="content">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">{{ project.name|capitalize }}</h3>
+                        <div class="box-tools pull-right">
+                            {{ form_start(delete_form) }}
+                            {{ form_widget(delete_form) }}
+                            <a class="btn btn-link btn-xs" href="{{ path('project_edit', {id: project.id}) }}">
+                               {{ 'Edit'|trans({}, 'Project') }}
+                            </a>
+                            <button class="btn btn-link btn-xs" type="submit">{{ 'Delete'|trans({}, 'Project') }}</button>
+                            <input name="modal" type="hidden" value="0">
+                            {{ form_end(delete_form) }}
+
+                            <div id="delete_confirm" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h3>{{ 'Confirm delete'|trans({}, 'Project') }}</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ 'You are about to delete an item'|trans({}, 'Project') }}, {{ 'this procedure is irreversible'|trans({}, 'Project') }}.</p>
+                                            <p>{{ 'Do you want to proceed?'|trans({}, 'Project') }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-danger">{{ 'Yes'|trans({}, 'Project') }}</button>
+                                            <button class="btn btn-default" data-dismiss="modal">{{ 'No'|trans({}, 'Project') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">{{'Description'|trans({}, 'Project')}}</th>
+                                    <td>{{ project.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">{{'Type'|trans({}, 'Project')}}</th>
+                                    <td>{{ project.type }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">{{'Finished'|trans({}, 'Project')}}</th>
+                                    <td>{{ project.finished|date('y-m-d H:i') }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">
+                        <i class="fa fa-info-circle"></i>
+                        <h3 class="box-title">Docs</h3>
+                        <div class="box-tools">
+                            <a href="{{ path('docpage_add_toproj', {id:project.id}) }}">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <ul>
+                            {% for page in project.docPages %}
+                                <li>
+                                    <a href="{{ path('docpage_show', {id:page.id}) }}">
+                                        {{ page.title|capitalize }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="box-footer">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="info-box bg-green">
+                    <span class="info-box-icon"><i class="ionicons ion-ios-clock"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">{{ 'overall spent' }}</span>
+                        <span class="info-box-number">{{ overallSpent }}</span>
+                        <div class="progress">
+                            <div class="progress-bar" style="width: {{ overallSpentRatio }}%"></div>
+                        </div>
+                        <span class="progress-description">
+                            {{ overallSpentRatio }}% of the overall estimated time
+                        </span>
+                    </div><!-- /.info-box-content -->
+                </div><!-- /.info-box -->
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="info-box">
+                            <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ 'current month spent' }}</span>
+                                <span class="info-box-number">{{ monthSpent }}</span>
+                            </div><!-- /.info-box-content -->
+                        </div><!-- /.info-box -->
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="info-box">
+                            <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ 'current week spent' }}</span>
+                                <span class="info-box-number">{{ weekSpent }}</span>
+                            </div><!-- /.info-box-content -->
+                        </div><!-- /.info-box -->
+                    </div>
+
+                </div>
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">{{ 'boards'|trans|capitalize }}</h3>
+                        <div class="box-tools">
+                            <a class="btn btn-link" href="{{ path('board_new_to_project', { "id": project.id }) }}">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <ul>
+                            {% for board in projectBoards %}
+                                <li>
+                                    <a class="" href="{{ path('board_show', {"id":board.id}) }}">
+                                        {{ board.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="box-footer">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </section>
+
+{% endblock %}

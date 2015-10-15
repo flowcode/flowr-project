@@ -1,0 +1,48 @@
+{% extends "FlowerCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ '%entity% list'|trans({'%entity%': 'Estimation'}, 'Estimation') }} - {{ parent() }}{% endblock %}
+{% block body %}
+    <section class="content-header">
+        <h1>{{ 'Estimation' | trans({}, 'Estimation')}}</h1>
+    </section>
+    <section class="content">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">{{ '%entity% list'|trans({'%entity%': 'Estimation'}, 'Estimation') }}</h3>
+                <div class="box-tools pull-right">
+                    <a class="btn btn-link btn-xs" href={{ path('estimation_new') }}>
+                        <i class="fa fa-plus"></i> {{ 'Create a new %entity%'|trans({'%entity%': 'Estimation'}, 'Estimation') }}
+                    </a>
+                </div>
+            </div>
+            <div class="box-body">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Ratioadmin</th>
+                        <th scope="col">Ratiotesting</th>
+                        <th scope="col">Dailyworkinghours</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estimation in paginator %}
+                        <tr>
+                            <td><a href="{{ path('estimation_show', {id: estimation.id}) }}">{{ estimation.name|capitalize }}</a></td>
+                            <td>{{ estimation.ratioAdmin }}</td>
+                            <td>{{ estimation.ratioTesting }}</td>
+                            <td>{{ estimation.dailyWorkingHours }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {{ knp_pagination_render(paginator) }}
+            </div>
+        <div class="box-footer">
+
+        </div>
+
+    </section>
+
+{% endblock %}
