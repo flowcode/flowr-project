@@ -17,7 +17,8 @@
         "MIT"
     ],
     "require" : {
-        "friendsofsymfony/project-bundle": "~2.0@dev"
+        "flower/clientsbundle": "dev-master",
+        "flower/boardbundle": "dev-master"
     },
     "autoload" : {
         "psr-0" : {
