@@ -1,5 +1,5 @@
 {
-    "name" : "flowcode/projectbundle",
+    "name" : "flower/projectbundle",
     "description" : "project bundle",
     "type" : "symfony-bundle",
     "authors" : [{
