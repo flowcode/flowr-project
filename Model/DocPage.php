@@ -41,7 +41,9 @@ class DocPage
      * @JoinColumn(name="project_id", referencedColumnName="id")
      * */
     protected $project;
-
+    public function __construct()
+    {
+    }
     /**
      * Get id
      *

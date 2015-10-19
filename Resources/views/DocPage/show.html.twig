@@ -1,0 +1,38 @@
+{% extends "FlowerCoreBundle::layout.html.twig" %}
+
+{% block title %}DocPage - {{ parent() }}{% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <h1>
+            <a href="{{ path('account_show', { 'id': docpage.project.account.id }) }}">{{ docpage.project.account|trans}}</a>  
+            <i class="fa fa-angle-right"></i>
+            <a href="{{ path('project_show', { 'id': docpage.project.id }) }}">{{ docpage.project|trans}}</a>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href={{ path('dashboard') }}><i class="fa fa-dashboard"></i> {{"Dashboard" | trans({}, 'DocPage')}}</a></li>
+            <li><a href="{{ path('docpage') }}"> {{ '%entity% list'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</a></li>
+            <li class="active" >{{ '%entity%'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</li>
+        </ol>
+    </section>
+    <section class="content">    
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">{{ docpage.title }}</h3>                            
+                <div class="box-tools">
+                    <a class="btn btn-default" href="{{ path('docpage_edit', {id: docpage.id}) }}">
+                        <i class="fa fa-edit"></i> {{ 'edit'|trans }}
+                    </a>
+                </div>
+            </div>
+            <div class="box-body">
+                {{ docpage.content|raw }}
+            </div>
+            <div class="box-footer">
+
+            </div>
+        </div>
+
+    </section>
+
+{% endblock %}

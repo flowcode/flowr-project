@@ -4,4 +4,9 @@ services:
         arguments: ["@security.context"]
         tags:
             - { name: form.type, alias: project_type }    
+    form.type.docproject:
+        class: Flower\ProjectBundle\Form\Type\DocPageType
+        arguments: ["@security.context"]
+        tags:
+            - { name: form.type, alias: project_type }    
     
