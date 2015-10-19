@@ -1,16 +1,17 @@
 <?php
 
-namespace Flower\CoreBundle\Controller;
+namespace Flower\ProjectBundle\Controller;
 
 use Doctrine\ORM\QueryBuilder;
 use Flower\CoreBundle\Form\Type\ProjectType;
 use Flower\CoreBundle\Form\Type\TaskProjectType;
 use Flower\CoreBundle\Form\Type\TaskType;
-use Flower\ModelBundle\Entity\Project;
-use Flower\ModelBundle\Entity\TaskStatus;
+use Flower\ModelBundle\Entity\Project\Project;
 use Flower\ModelBundle\Entity\User\User;
-use Flower\ModelBundle\Entity\TaskType as TaskType2;
-use Flower\ModelBundle\Entity\Task;
+use Flower\ModelBundle\Entity\Board\TaskStatus;
+use Flower\ModelBundle\Entity\Board\TaskType as TaskType2;
+use Flower\ModelBundle\Entity\Board\Task;
+use Flower\ModelBundle\Entity\Board\Board;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -37,17 +38,16 @@ class ProjectController extends Controller
     public function dashboardAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $userAccount = $this->getUser()->getUserAccount();
 
-        $projStatuses = $em->getRepository('FlowerModelBundle:ProjectStatus')->findAll();
-        $projectRepo = $em->getRepository("FlowerModelBundle:Project");
+        $projStatuses = $em->getRepository('FlowerModelBundle:Project\ProjectStatus')->findAll();
+        $projectRepo = $em->getRepository("FlowerModelBundle:Project\Project");
 
         $projects = array();
 
         foreach ($projStatuses as $projStatus) {
             $status = array();
             $status["entity"] = $projStatus;
-            $status["projects"] = $projectRepo->findByStatus($userAccount->getId(), $projStatus->getId());
+            $status["projects"] = $projectRepo->findByStatus($projStatus->getId());
             $projects[] = $status; 
         }
 
@@ -84,10 +84,8 @@ class ProjectController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $userAccount = $this->getUser()->getUserAccount();
         
-        $qb = $em->getRepository('FlowerModelBundle:Project')->createQueryBuilder('p');
-        $qb->where("p.userAccount = :user_account")->setParameter("user_account", $userAccount);
+        $qb = $em->getRepository('FlowerModelBundle:Project\Project')->createQueryBuilder('p');
         $this->addQueryBuilderSort($qb, 'project');
         $paginator = $this->get('knp_paginator')->paginate($qb, $request->query->get('page', 1), 20);
 
@@ -107,12 +105,9 @@ class ProjectController extends Controller
     {
         $deleteForm = $this->createDeleteForm($project->getId(), 'project_delete');
         $em = $this->getDoctrine()->getManager();
-        $overallSpent = $em->getRepository("FlowerModelBundle:TimeLog")->getOverallBy($project->getId());
-        $monthSpent = $em->getRepository("FlowerModelBundle:TimeLog")->getMonthBy($project->getId());
-        $weekSpent = $em->getRepository("FlowerModelBundle:TimeLog")->getWeekBy($project->getId());
-
-        $projectBoards = $em->getRepository("FlowerModelBundle:Board")->getCurrentBoards(null, $project->getId());
-
+        $overallSpent = $em->getRepository("FlowerModelBundle:Project\Project")->getOverallBy($project);
+        $monthSpent = $em->getRepository("FlowerModelBundle:Project\Project")->getMonthBy($project);
+        $weekSpent = $em->getRepository("FlowerModelBundle:Project\Project")->getWeekBy($project);
         if (!is_null($project->getEstimated())) {
             $spentPercentage = ($overallSpent * 100) / $project->getEstimated();
         } else {
@@ -126,7 +121,7 @@ class ProjectController extends Controller
             'overallSpent' => $overallSpent,
             'monthSpent' => $monthSpent,
             'weekSpent' => $weekSpent,
-            'projectBoards' => $projectBoards,
+            'projectBoards' => $project->getBoards(),
             'overallSpentRatio' => $spentPercentage,
             'delete_form' => $deleteForm->createView(),
         );
@@ -155,7 +150,7 @@ class ProjectController extends Controller
      *
      * @Route("/create", name="project_create")
      * @Method("POST")
-     * @Template("FlowerCoreBundle:Project:new.html.twig")
+     * @Template("FlowerProjectBundle:Project:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -163,10 +158,6 @@ class ProjectController extends Controller
         $form = $this->createForm($this->get('form.type.project'), $project);
         if ($form->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            $userAccount = $this->getUser()->getUserAccount();
-            $project->setUserAccount($userAccount);
-
             $em->persist($project);
             $em->flush();
 
@@ -206,7 +197,7 @@ class ProjectController extends Controller
      *
      * @Route("/{id}/update", name="project_update", requirements={"id"="\d+"})
      * @Method("PUT")
-     * @Template("FlowerCoreBundle:Project:edit.html.twig")
+     * @Template("FlowerProjectBundle:Project:edit.html.twig")
      */
     public function updateAction(Project $project, Request $request)
     {
@@ -306,5 +297,51 @@ class ProjectController extends Controller
         if (is_array($order = $this->getOrder($name))) {
             $qb->orderBy($alias . '.' . $order['field'], $order['type']);
         }
+    }
+
+
+    /**
+     * Displays a form to create a new Board entity.
+     *
+     * @Route("/board/{id}/new", name="board_new_to_project")
+     * @Method("GET")
+     * @Template("FlowerBoardBundle:Board:new.html.twig")
+     */
+    public function newToProjectAction(Project $project)
+    {
+        $board = new Board();
+        $form = $this->createForm($this->get("form.type.board"), $board, array(
+                    'action' => $this->generateUrl('board_new_to_project_create',array("id" => $project->getId())),
+                    'method' => 'POST',
+                ));
+        return array(
+            'board' => $board,
+            'form' => $form->createView(),
+        );
+    }
+    /**
+     * Creates a new Board entity.
+     *
+     * @Route("/{id}/create", name="board_new_to_project_create")
+     * @Method("POST")
+     * @Template("FlowerBoardBundle:Board:new.html.twig")
+     */
+    public function createBoardAction(Project $project, Request $request)
+    {
+        $board = new Board();
+        $form = $this->createForm($this->get("form.type.board"), $board);
+        if ($form->handleRequest($request)->isValid()) {
+            $project->addBoard($board);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($board);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('board_show', array('id' => $board->getId())));
+        }
+
+        return array(
+            'board' => $board,
+            'form'   => $form->createView(),
+        );
     }
 }

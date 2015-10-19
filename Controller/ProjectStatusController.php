@@ -1,6 +1,6 @@
 <?php
 
-namespace Flower\CoreBundle\Controller;
+namespace Flower\ProjectBundle\Controller;
 
 use Doctrine\ORM\QueryBuilder;
 use Flower\CoreBundle\Form\Type\ProjectStatusType;

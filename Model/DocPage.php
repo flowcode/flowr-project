@@ -1,6 +1,6 @@
 <?php
 
-namespace Flower\ModelBundle\Entity;
+namespace Flower\ProjectBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping\ManyToOne;
 /**
  * DocPage
  *
- * @ORM\Table(name="doc_page")
- * @ORM\Entity(repositoryClass="Flower\ModelBundle\Repository\DocPageRepository")
  */
 class DocPage
 {
@@ -22,27 +20,27 @@ class DocPage
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text")
      */
-    private $content;
+    protected $content;
 
     /**
-     * @ManyToOne(targetEntity="Project", inversedBy="docPages")
+     * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\Project\Project", inversedBy="docPages")
      * @JoinColumn(name="project_id", referencedColumnName="id")
      * */
-    private $project;
+    protected $project;
 
     /**
      * Get id
@@ -104,10 +102,10 @@ class DocPage
     /**
      * Set project
      *
-     * @param \Flower\ModelBundle\Entity\Project $project
+     * @param \Flower\ModelBundle\Entity\Project\Project $project
      * @return DocPage
      */
-    public function setProject(\Flower\ModelBundle\Entity\Project $project = null)
+    public function setProject(\Flower\ModelBundle\Entity\Project\Project $project = null)
     {
         $this->project = $project;
 
@@ -117,7 +115,7 @@ class DocPage
     /**
      * Get project
      *
-     * @return \Flower\ModelBundle\Entity\Project 
+     * @return \Flower\ModelBundle\Entity\Project\Project 
      */
     public function getProject()
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flower\ModelBundle\Entity;
+namespace Flower\ProjectBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping\JoinColumn;
 /**
  * EstimationItem
  *
- * @ORM\Table(name="estimation_item")
- * @ORM\Entity(repositoryClass="Flower\ModelBundle\Repository\EstimationItemRepository")
  */
 class EstimationItem
 {
@@ -21,42 +19,42 @@ class EstimationItem
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="text")
      */
-    private $description;
+    protected $description;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="optimistic", type="integer")
      */
-    private $optimistic;
+    protected $optimistic;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="pesimistic", type="integer")
      */
-    private $pesimistic;
+    protected $pesimistic;
 
     /**
-     * @ManyToOne(targetEntity="Estimation", inversedBy="items")
+     * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\Project\Estimation", inversedBy="items")
      * @JoinColumn(name="estimation_id", referencedColumnName="id")
      *
      * */
-    private $estimation;
+    protected $estimation;
 
 
     /**
@@ -164,10 +162,10 @@ class EstimationItem
     /**
      * Set estimation
      *
-     * @param \Flower\ModelBundle\Entity\Estimation $estimation
+     * @param \Flower\ModelBundle\Entity\Project\Estimation $estimation
      * @return EstimationItem
      */
-    public function setEstimation(\Flower\ModelBundle\Entity\Estimation $estimation = null)
+    public function setEstimation(\Flower\ModelBundle\Entity\Project\Estimation $estimation = null)
     {
         $this->estimation = $estimation;
 
@@ -177,7 +175,7 @@ class EstimationItem
     /**
      * Get estimation
      *
-     * @return \Flower\ModelBundle\Entity\Estimation 
+     * @return \Flower\ModelBundle\Entity\Project\Estimation 
      */
     public function getEstimation()
     {

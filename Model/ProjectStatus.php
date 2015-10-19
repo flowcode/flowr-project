@@ -1,14 +1,12 @@
 <?php
 
-namespace Flower\ModelBundle\Entity;
+namespace Flower\ProjectBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ProjectStatus
  *
- * @ORM\Table(name="project_status")
- * @ORM\Entity(repositoryClass="Flower\ModelBundle\Repository\ProjectStatusRepository")
  */
 class ProjectStatus
 {
@@ -25,21 +23,21 @@ class ProjectStatus
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255)
      */
-    private $description;
+    protected $description;
 
     /**
      * Get id

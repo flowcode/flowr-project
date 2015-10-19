@@ -1,6 +1,6 @@
 <?php
 
-namespace Flower\ModelBundle\Entity;
+namespace Flower\ProjectBundle\Model;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\OneToMany;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JMS\Serializer\Annotation\Groups;
@@ -15,8 +17,6 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Project
  *
- * @ORM\Table(name="project")
- * @ORM\Entity(repositoryClass="Flower\ModelBundle\Repository\ProjectRepository")
  */
 class Project
 {
@@ -32,7 +32,7 @@ class Project
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"search", "public_api"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -40,7 +40,7 @@ class Project
      * @ORM\Column(name="name", type="string", length=255)
      * @Groups({"search", "public_api"})
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
@@ -48,7 +48,7 @@ class Project
      * @ORM\Column(name="type", type="string", length=255)
      * @Groups({"search", "public_api"})
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
@@ -56,7 +56,7 @@ class Project
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Groups({"search", "public_api"})
      */
-    private $description;
+    protected $description;
 
     /**
      * @var float
@@ -64,32 +64,36 @@ class Project
      * @ORM\Column(name="estimated_hours", type="float", nullable=true)
      * @Groups({"public_api"})
      */
-    private $estimated;
+    protected $estimated;
 
     /**
      * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\Clients\Account")
      * @JoinColumn(name="account_id", referencedColumnName="id")
      * @Groups({"public_api"})
      * */
-    private $account;
+    protected $account;
 
     /**
-     * @ManyToOne(targetEntity="ProjectStatus")
+     * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\Project\ProjectStatus")
      * @JoinColumn(name="status_id", referencedColumnName="id")
      * @Groups({"public_api"})
      * */
-    private $status;
+    protected $status;
 
     /**
-     * @OneToMany(targetEntity="DocPage", mappedBy="project")
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Project\DocPage", mappedBy="project")
      * @Groups({"public_api"})
      * */
-    private $docPages;
+    protected $docPages;
 
-    /**
-     * @OneToMany(targetEntity="Board", mappedBy="project")
-     * */
-    private $boards;
+        /**
+     * @ManyToMany(targetEntity="\Flower\ModelBundle\Entity\Board\Board")
+     * @JoinTable(name="project_boards",
+     *      joinColumns={@JoinColumn(name="project_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="board_id", referencedColumnName="id", unique=true)}
+     *      )
+     **/
+    protected $boards;
 
     /**
      * @var DateTime
@@ -97,7 +101,7 @@ class Project
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
      */
-    private $created;
+    protected $created;
 
     /**
      * @var DateTime
@@ -105,7 +109,7 @@ class Project
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updated", type="datetime")
      */
-    private $updated;
+    protected $updated;
 
     /**
      * @var DateTime
@@ -113,7 +117,7 @@ class Project
      * @ORM\Column(name="finished", type="datetime", nullable=true)
      * @Groups({"search"})
      */
-    private $finished;
+    protected $finished;
 
     /**
      * @var boolean
@@ -121,7 +125,7 @@ class Project
      * @ORM\Column(name="enabled", type="boolean")
      * @Groups({"search"})
      */
-    private $enabled;
+    protected $enabled;
 
     function __construct()
     {
@@ -281,10 +285,10 @@ class Project
     /**
      * Set status
      *
-     * @param ProjectStatus $status
+     * @param \Flower\ModelBundle\Entity\Project\ProjectStatus $status
      * @return Project
      */
-    public function setStatus(ProjectStatus $status = null)
+    public function setStatus(\Flower\ModelBundle\Entity\Project\ProjectStatus $status = null)
     {
         $this->status = $status;
 
@@ -294,7 +298,7 @@ class Project
     /**
      * Get status
      *
-     * @return ProjectStatus
+     * @return \Flower\ModelBundle\Entity\Project\ProjectStatus
      */
     public function getStatus()
     {
@@ -356,10 +360,10 @@ class Project
     /**
      * Add docPages
      *
-     * @param DocPage $docPages
+     * @param \Flower\ModelBundle\Entity\Project\DocPage $docPages
      * @return Project
      */
-    public function addDocPage(DocPage $docPages)
+    public function addDocPage(\Flower\ModelBundle\Entity\Project\DocPage $docPages)
     {
         $this->docPages[] = $docPages;
 
@@ -369,9 +373,9 @@ class Project
     /**
      * Remove docPages
      *
-     * @param DocPage $docPages
+     * @param \Flower\ModelBundle\Entity\Project\DocPage $docPages
      */
-    public function removeDocPage(DocPage $docPages)
+    public function removeDocPage(\Flower\ModelBundle\Entity\Project\DocPage $docPages)
     {
         $this->docPages->removeElement($docPages);
     }
@@ -414,7 +418,7 @@ class Project
      * @param Board $boards
      * @return Project
      */
-    public function addBoard(Board $boards)
+    public function addBoard(\Flower\ModelBundle\Entity\Board\Board $boards)
     {
         $this->boards[] = $boards;
 
@@ -424,9 +428,9 @@ class Project
     /**
      * Remove boards
      *
-     * @param Board $boards
+     * @param \Flower\ModelBundle\Entity\Board\Board $boards
      */
-    public function removeBoard(Board $boards)
+    public function removeBoard(\Flower\ModelBundle\Entity\Board\Board $boards)
     {
         $this->boards->removeElement($boards);
     }

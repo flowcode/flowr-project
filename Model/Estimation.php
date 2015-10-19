@@ -1,6 +1,6 @@
 <?php
 
-namespace Flower\ModelBundle\Entity;
+namespace Flower\ProjectBundle\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -11,8 +11,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Estimation
  *
- * @ORM\Table(name="estimation")
- * @ORM\Entity(repositoryClass="Flower\ModelBundle\Repository\EstimationRepository")
  */
 class Estimation
 {
@@ -23,60 +21,60 @@ class Estimation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="ratioAdmin", type="integer")
      */
-    private $ratioAdmin;
+    protected $ratioAdmin;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="ratioTesting", type="integer")
      */
-    private $ratioTesting;
+    protected $ratioTesting;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="dailyWorkingHours", type="integer")
      */
-    private $dailyWorkingHours;
+    protected $dailyWorkingHours;
 
     /**
-     * @ManyToOne(targetEntity="Opportunity")
+     * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\Clients\Opportunity")
      * @JoinColumn(name="opportunity_id", referencedColumnName="id")
      *
      * */
-    private $opportunity;
+    protected $opportunity;
 
     /**
-     * @ManyToOne(targetEntity="Account")
+     * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\Clients\Account")
      * @JoinColumn(name="account_id", referencedColumnName="id")
      *
      * */
-    private $account;
+    protected $account;
 
     /**
-     * @ManyToOne(targetEntity="Project")
+     * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\Project\Project")
      * @JoinColumn(name="project_id", referencedColumnName="id")
      * */
-    private $project;
+    protected $project;
 
     /**
-     * @OneToMany(targetEntity="EstimationItem", mappedBy="estimation")
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Project\EstimationItem", mappedBy="estimation")
      * */
-    private $items;
+    protected $items;
 
     function __construct()
     {
@@ -188,10 +186,10 @@ class Estimation
     /**
      * Set account
      *
-     * @param \Flower\ModelBundle\Entity\Account $account
+     * @param \Flower\ModelBundle\Entity\Clients\Account $account
      * @return Estimation
      */
-    public function setAccount(\Flower\ModelBundle\Entity\Account $account = null)
+    public function setAccount(\Flower\ModelBundle\Entity\Clients\Account $account = null)
     {
         $this->account = $account;
 
@@ -201,7 +199,7 @@ class Estimation
     /**
      * Get account
      *
-     * @return \Flower\ModelBundle\Entity\Account
+     * @return \Flower\ModelBundle\Entity\Clients\Account
      */
     public function getAccount()
     {
@@ -211,10 +209,10 @@ class Estimation
     /**
      * Set project
      *
-     * @param \Flower\ModelBundle\Entity\Project $project
+     * @param \Flower\ModelBundle\Entity\Project\Project $project
      * @return Estimation
      */
-    public function setProject(\Flower\ModelBundle\Entity\Project $project = null)
+    public function setProject(\Flower\ModelBundle\Entity\Project\Project $project = null)
     {
         $this->project = $project;
 
@@ -224,7 +222,7 @@ class Estimation
     /**
      * Get project
      *
-     * @return \Flower\ModelBundle\Entity\Project
+     * @return \Flower\ModelBundle\Entity\Project\Project
      */
     public function getProject()
     {
@@ -234,10 +232,10 @@ class Estimation
     /**
      * Add items
      *
-     * @param \Flower\ModelBundle\Entity\EstimationItem $items
+     * @param \Flower\ModelBundle\Entity\Project\EstimationItem $items
      * @return Estimation
      */
-    public function addItem(\Flower\ModelBundle\Entity\EstimationItem $items)
+    public function addItem(\Flower\ModelBundle\Entity\Project\EstimationItem $items)
     {
         $this->items[] = $items;
 
@@ -247,9 +245,9 @@ class Estimation
     /**
      * Remove items
      *
-     * @param \Flower\ModelBundle\Entity\EstimationItem $items
+     * @param \Flower\ModelBundle\Entity\Project\EstimationItem $items
      */
-    public function removeItem(\Flower\ModelBundle\Entity\EstimationItem $items)
+    public function removeItem(\Flower\ModelBundle\Entity\Project\EstimationItem $items)
     {
         $this->items->removeElement($items);
     }
@@ -272,10 +270,10 @@ class Estimation
     /**
      * Set opportunity
      *
-     * @param \Flower\ModelBundle\Entity\Opportunity $opportunity
+     * @param \Flower\ModelBundle\Entity\Clients\Opportunity $opportunity
      * @return Estimation
      */
-    public function setOpportunity(\Flower\ModelBundle\Entity\Opportunity $opportunity = null)
+    public function setOpportunity(\Flower\ModelBundle\Entity\Clients\Opportunity $opportunity = null)
     {
         $this->opportunity = $opportunity;
 
@@ -285,7 +283,7 @@ class Estimation
     /**
      * Get opportunity
      *
-     * @return \Flower\ModelBundle\Entity\Opportunity 
+     * @return \Flower\ModelBundle\Entity\Clients\Opportunity 
      */
     public function getOpportunity()
     {

@@ -1,0 +1,7 @@
+services:
+    form.type.project:
+        class: Flower\ProjectBundle\Form\Type\ProjectType
+        arguments: ["@security.context"]
+        tags:
+            - { name: form.type, alias: project_type }    
+    
