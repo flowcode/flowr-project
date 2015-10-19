@@ -7,9 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Flower\ModelBundle\Entity\EstimationItem;
-use Flower\CoreBundle\Form\Type\EstimationItemType;
-use Flower\ModelBundle\Entity\Estimation;
+use Flower\ModelBundle\Entity\Project\EstimationItem;
+use Flower\ProjectBundle\Form\Type\EstimationItemType;
+use Flower\ModelBundle\Entity\Project\Estimation;
 
 /**
  * EstimationItem controller.
@@ -28,7 +28,7 @@ class EstimationItemController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->getRepository('FlowerModelBundle:EstimationItem')->createQueryBuilder('e');
+        $qb = $em->getRepository('FlowerModelBundle:Project\EstimationItem')->createQueryBuilder('e');
         $paginator = $this->get('knp_paginator')->paginate($qb, $request->query->get('page', 1), 20);
         return array(
             'paginator' => $paginator,
@@ -75,7 +75,7 @@ class EstimationItemController extends Controller
      *
      * @Route("/estimation/{id}/new", name="estimationitem_new_toestimation")
      * @Method("GET")
-     * @Template("FlowerCoreBundle:EstimationItem:new.html.twig")
+     * @Template("FlowerProjectBundle:EstimationItem:new.html.twig")
      */
     public function newToEstimationAction(Estimation $estimation)
     {
@@ -95,7 +95,7 @@ class EstimationItemController extends Controller
      *
      * @Route("/create", name="estimationitem_create")
      * @Method("POST")
-     * @Template("FlowerCoreBundle:EstimationItem:new.html.twig")
+     * @Template("FlowerProjectBundle:EstimationItem:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -144,7 +144,7 @@ class EstimationItemController extends Controller
      *
      * @Route("/{id}/update", name="estimationitem_update", requirements={"id"="\d+"})
      * @Method("PUT")
-     * @Template("FlowerCoreBundle:EstimationItem:edit.html.twig")
+     * @Template("FlowerProjectBundle:EstimationItem:edit.html.twig")
      */
     public function updateAction(EstimationItem $estimationitem, Request $request)
     {

@@ -7,9 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Flower\ModelBundle\Entity\Estimation;
-use Flower\CoreBundle\Form\Type\EstimationType;
-use Flower\ModelBundle\Entity\EstimationItem;
+use Flower\ModelBundle\Entity\Project\Estimation;
+use Flower\ProjectBundle\Form\Type\EstimationType;
+use Flower\ModelBundle\Entity\Project\EstimationItem;
 
 /**
  * Estimation controller.
@@ -28,7 +28,7 @@ class EstimationController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->getRepository('FlowerModelBundle:Estimation')->createQueryBuilder('e');
+        $qb = $em->getRepository('FlowerModelBundle:Project\Estimation')->createQueryBuilder('e');
         $paginator = $this->get('knp_paginator')->paginate($qb, $request->query->get('page', 1), 20);
         return array(
             'paginator' => $paginator,
@@ -119,7 +119,7 @@ class EstimationController extends Controller
      *
      * @Route("/create", name="estimation_create")
      * @Method("POST")
-     * @Template("FlowerCoreBundle:Estimation:new.html.twig")
+     * @Template("FlowerProjectBundle:Estimation:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -166,7 +166,7 @@ class EstimationController extends Controller
      *
      * @Route("/{id}/update", name="estimation_update", requirements={"id"="\d+"})
      * @Method("PUT")
-     * @Template("FlowerCoreBundle:Estimation:edit.html.twig")
+     * @Template("FlowerProjectBundle:Estimation:edit.html.twig")
      */
     public function updateAction(Estimation $estimation, Request $request)
     {
