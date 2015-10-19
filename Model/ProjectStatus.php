@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProjectStatus
 {
-    
+     
     const STATUS_BACKLOG = "status_backlog";
     const STATUS_IN_PROGRESS = "status_in_progress";
     const STATUS_TESTING = "status_testing";
