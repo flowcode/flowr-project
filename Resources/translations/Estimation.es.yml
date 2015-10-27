@@ -1,0 +1,23 @@
+'%entity%': '%entity%'   # FIXME
+'%entity% List': 'Lista de %entity%'
+'%entity% creation': 'Creación de %entity%'
+'%entity% edit': 'Edición de %entity%'
+'%entity% list': 'Lista de %entity%'
+'Confirm delete': 'Confirmar borrado'
+Copy: Copiar
+Create: Crear
+'Create a new %entity%': 'Crear nueva %entity%'
+Dailyworkinghours: Horas diarias de trabajo
+Dashboard: Dashboard
+Delete: Borrar
+'Do you want to proceed?': '¿Desea continuar de todos modos?'
+Edit: Editar
+Estimation: Estimation   # FIXME
+Name: Nombre
+'New %entity%': 'Nueva %entity%'
+'No': 'No'   # FIXME
+Ratioadmin: Porcentaje de administración
+Ratiotesting: Porcentaje de test
+'Yes': 'Si'
+'You are about to delete an item': 'Usted esta por borrar un elemento'
+'this procedure is irreversible': 'esta accion será irreversible'

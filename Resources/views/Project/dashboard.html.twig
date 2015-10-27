@@ -12,7 +12,7 @@
                 <h3 class="box-title">{{ 'overview'|trans|capitalize }}</h3>
                 <div class="box-tools pull-right">
                     <a class="btn btn-link btn-xs" href={{ path('project_new') }}>
-                        <i class="fa fa-plus"></i> {{ 'new %entity%'|trans({'%entity%': 'project'})|capitalize }}
+                        <i class="fa fa-plus"></i> {{ 'new %entity%'|trans({'%entity%': 'project'},'Project')|capitalize }}
                     </a>
                     <a class="btn btn-link btn-xs" href={{ path('project') }}>
                         <i class="fa fa-list"></i> {{ 'List view'|trans }}

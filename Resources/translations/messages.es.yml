@@ -1,0 +1,15 @@
+Account: Cuenta
+Action: Acción
+'Kanban view': 'Vista Kanban'   # FIXME
+'List view': 'Vista de lista'   # FIXME
+Opportunity: Oportunidad
+Project: Proyectos
+apply: aplicar
+'assignee to': 'asignado a'   # FIXME
+boards: tableros
+'change status': 'cambiar estado'   # FIXME
+clean: borrar
+edit: editar
+'new %entity%': 'new %entity%'   # FIXME
+overview: resumen
+projects: proyectos
