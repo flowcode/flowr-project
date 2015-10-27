@@ -8,7 +8,6 @@ apply: aplicar
 'assignee to': 'asignado a'   # FIXME
 boards: tableros
 'change status': 'cambiar estado'   # FIXME
-clean: borrar
 edit: editar
 'new %entity%': 'new %entity%'   # FIXME
 overview: resumen
