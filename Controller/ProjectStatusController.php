@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * ProjectStatus controller.
  *
- * @Route("/projectstatus")
+ * @Route("/admin/projectstatus")
  */
 class ProjectStatusController extends Controller
 {
