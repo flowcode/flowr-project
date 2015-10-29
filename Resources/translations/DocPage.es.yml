@@ -1,4 +1,4 @@
-'%entity%': '%entity%'   # FIXME
+'%entity%': '%entity%'
 '%entity% List': 'Lista de %entity%'
 '%entity% creation': 'Creación de %entity%'
 '%entity% edit': 'Edición de %entity%'
@@ -7,14 +7,14 @@ Actions: Acciones
 'Confirm delete': 'Confirmar borrado'
 Create: Crear
 'Create a new %entity%': 'Crear nueva %entity%'
-Dashboard: Dashboard   # FIXME
+Dashboard: Dashboard
 Delete: Borrar
 'Do you want to proceed?': '¿Desea continuar de todos modos?'
 DocPage: Documento
 Edit: Editar
 'New %entity%': 'Nueva %entity%'
-'No': 'No'   # FIXME
-'Yes': 'Si'
+'No': 'No'
+'Yes': Si
 'You are about to delete an item': 'Usted esta por borrar un elemento'
 edit: editar
 show: ver

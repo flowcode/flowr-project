@@ -2,21 +2,18 @@
 '%entity% edit': 'Edición de %entity%'
 '%entity% list': 'Lista de %entity%'
 'Confirm delete': 'Confirmar borrado'
-'new %entity%': 'nuevo proyecto'
 Create: Crear
 Delete: Borrar
 Description: Descripción
 'Do you want to proceed?': '¿Desea continuar de todos modos?'
 Edit: Editar
 Finished: Finalizado
-'No': 'No'   # FIXME
+'No': 'No'
 Projects: Proyectos
 Type: Tipo
-'Yes': 'Si'
+'Yes': Si
 'You are about to delete an item': 'Usted esta por borrar un elemento'
-fixed: fixed   # FIXME
-ongoing: en desarrollo
+fixed: fixed
+'new %entity%': 'nuevo proyecto'
+ongoing: 'en desarrollo'
 'this procedure is irreversible': 'esta accion será irreversible'
-Name: Nombre
-Updated: Actualizado
-Created: Creado

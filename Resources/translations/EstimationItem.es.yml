@@ -1,4 +1,4 @@
-'%entity%': '%entity%'   # FIXME
+'%entity%': '%entity%'
 '%entity% List': 'Lista de %entity%'
 '%entity% creation': 'Creación de %entity%'
 '%entity% edit': 'Edición de %entity%'
@@ -7,19 +7,19 @@ Actions: Acciones
 'Confirm delete': 'Confirmar borrado'
 Create: Crear
 'Create a new %entity%': 'Crear nueva %entity%'
-Dashboard: Dashboard   # FIXME
+Dashboard: Dashboard
 Delete: Borrar
 Description: Descripción
 'Do you want to proceed?': '¿Desea continuar de todos modos?'
 Edit: Editar
-EstimationItem: EstimationItem   # FIXME
-Id: Id   # FIXME
+EstimationItem: EstimationItem
+Id: Id
 Name: Nombre
 'New %entity%': 'Nueva %entity%'
-'No': 'No'   # FIXME
+'No': 'No'
 Optimistic: Optimista
 Pesimistic: Pesimista
-'Yes': 'Si'
+'Yes': Si
 'You are about to delete an item': 'Usted esta por borrar un elemento'
 edit: editar
 show: ver
