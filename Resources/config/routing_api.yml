@@ -1,0 +1,7 @@
+flower_project_api_getall:
+    path:     /
+    defaults: { _controller: FlowerProjectBundle:Api\Project:getAll }
+
+flower_project_api_getone:
+    path:     /{id}
+    defaults: { _controller: FlowerProjectBundle:Api\Project:getById }
