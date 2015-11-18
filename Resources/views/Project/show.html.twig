@@ -138,12 +138,20 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <ul>
+                        <ul class="list-unstyled">
                             {% for board in projectBoards %}
                                 <li>
-                                    <a class="" href="{{ path('board_show', {"id":board.id}) }}">
-                                        {{ board.name }}
+                                    <a class="" href="{{ path('board_show', {"id":board.board_id}) }}">
+                                        {{ board.board_name | capitalize}}
                                     </a>
+                                        <div class="progress-group" title="{{board.pendding_countTasks}}/{{board.countTasks}}">
+                                            <span class="progress-number">{{100*(board.pendding_countTasks/board.
+                                        countTasks) | number_format(3, '.', ',')}}%</span>
+
+                                            <div class="progress xxs">
+                                              <div class="progress-bar progress-bar-red" style="width: {{100*(board.pendding_countTasks/board.countTasks)}}%;"></div>
+                                            </div>
+                                          </div>
                                 </li>
                             {% endfor %}
                         </ul>

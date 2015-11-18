@@ -124,6 +124,42 @@ class ProjectRepository extends EntityRepository
     
         return $qb->getQuery()->getSingleScalarResult();
     }
+    public function getCompleteBoardsByProjectAndStatus($project, $status){
+        $qb = $this->createQueryBuilder("p");
+        $qb->select("p.id as projectId, b.id as board_id,b.name as board_name, SUM(tl.hours) as time, count(t) as countTasks");
+        $qb->join("p.boards", "b");
+        $qb->join("b.tasks", "t");
+        $qb->join("t.status", "ts");
+        $qb->leftJoin(
+            'FlowerModelBundle:Board\TimeLog',
+            'tl',
+            Join::WITH,
+            'tl.task = t.id'
+        );       
+        $qb->andWhere("p.id = :project")->setParameter("project", $project);
+        $qb->andWhere("ts.name in (:status)")->setParameter("status", $status);
+        $qb->groupBy("b");
+        $qb->orderBy("b.id");
+        return $qb->getQuery()->getResult();
+    }
+    public function getCompleteBoardsByProject($project){
+        $qb = $this->createQueryBuilder("p");
+        $qb->select("p.id as projectId, b.id as board_id,b.name as board_name, SUM(tl.hours) as time, count(t) as countTasks");
+        $qb->join("p.boards", "b");
+        $qb->join("b.tasks", "t");
+        $qb->join("t.status", "ts");
+        $qb->leftJoin(
+            'FlowerModelBundle:Board\TimeLog',
+            'tl',
+            Join::WITH,
+            'tl.task = t.id'
+        );       
+        $qb->andWhere("p.id = :project")->setParameter("project", $project);
+        $qb->groupBy("b");
+        $qb->orderBy("b.id");
+        return $qb->getQuery()->getResult();
+    }
+
     public function findByBoard($board){
         $qb = $this->createQueryBuilder("p");
         $qb->join("p.boards","b");

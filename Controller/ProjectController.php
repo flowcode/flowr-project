@@ -116,12 +116,14 @@ class ProjectController extends Controller
 
         $spentPercentage = round($spentPercentage, 2);
 
+        $projectService = $this->get("flower.project");
+        $projectBoards = $projectService->getBoardsWithStadistics($project);
         return array(
             'project' => $project,
             'overallSpent' => $overallSpent,
             'monthSpent' => $monthSpent,
             'weekSpent' => $weekSpent,
-            'projectBoards' => $project->getBoards(),
+            'projectBoards' => $projectBoards,
             'overallSpentRatio' => $spentPercentage,
             'delete_form' => $deleteForm->createView(),
         );

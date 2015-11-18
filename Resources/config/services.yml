@@ -9,4 +9,10 @@ services:
         arguments: ["@security.context"]
         tags:
             - { name: form.type, alias: project_type }    
-    
+    flower.project:
+        class: Flower\ProjectBundle\Service\ProjectService
+        arguments: ['@security.context']
+        calls:
+          - [ setContainer,[ @service_container ] ]
+
+          
