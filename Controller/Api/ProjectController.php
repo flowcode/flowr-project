@@ -23,6 +23,16 @@ class ProjectController extends FOSRestController
         return $this->handleView($view);
     }
 
+    public function getByAccountAction(Request $request, $accountId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $projects = $em->getRepository('FlowerModelBundle:Project\Project')->findBy(array("account" => $accountId) , array("updated" => "DESC"), 20);
+
+        $view = FOSView::create($projects, Codes::HTTP_OK)->setFormat('json');
+        $view->getSerializationContext()->setGroups(array('public_api'));
+        return $this->handleView($view);
+    }
+
     public function getByIdAction(Request $request, Project $project)
     {
         $em = $this->getDoctrine()->getManager();
