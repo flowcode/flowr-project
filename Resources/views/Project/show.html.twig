@@ -3,41 +3,22 @@
 {% block title %}Project - {{ parent() }}{% endblock %}
 
 {% block body %}
-    {{ include("FlowerProjectBundle:Project:header.html.twig", { 'project': project }) }}
     <section class="content">
         <div class="row">
             <div class="col-md-6">
-                <div class="box">
+                {{ include("FlowerProjectBundle::appnav.html.twig", {  }) }} 
+                <div class="box" id='showProject'>
                     <div class="box-header">
                         <h3 class="box-title">{{ project.name|capitalize }}</h3>
                         <div class="box-tools pull-right">
                             {{ form_start(delete_form) }}
                             {{ form_widget(delete_form) }}
-                            <a class="btn btn-link btn-xs" href="{{ path('project_edit', {id: project.id}) }}">
-                               {{ 'Edit'|trans({}, 'Project') }}
-                            </a>
                             <button class="btn btn-link btn-xs" type="submit">{{ 'Delete'|trans({}, 'Project') }}</button>
+                            <a class="btn btn-link  btn-sm" onclick="showEdit(true)">
+                                {{ 'Edit'|trans({}, 'Product') }}
+                            </a>
                             <input name="modal" type="hidden" value="0">
                             {{ form_end(delete_form) }}
-
-                            <div id="delete_confirm" class="modal fade">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h3>{{ 'Confirm delete'|trans({}, 'Project') }}</h3>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>{{ 'You are about to delete an item'|trans({}, 'Project') }}, {{ 'this procedure is irreversible'|trans({}, 'Project') }}.</p>
-                                            <p>{{ 'Do you want to proceed?'|trans({}, 'Project') }}</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-danger">{{ 'Yes'|trans({}, 'Project') }}</button>
-                                            <button class="btn btn-default" data-dismiss="modal">{{ 'No'|trans({}, 'Project') }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="box-body">
@@ -62,7 +43,31 @@
 
                     </div>
                 </div>
+                <div class="box" id='editFormProject'  style="display: none;">
+                    <div class="box-header">
+                        <div class="box-tools">
+                            {{ form_start(delete_form) }}
+                            {{ form_widget(delete_form) }}
+                            <div class="btn-group record_actions">
+                                <button class="btn btn-link btn-sm" type="submit"> {{ 'Delete'|trans({}, 'Product') }}</button>
+                                <a class="btn btn-link  btn-sm" onclick="showEdit(false)">
+                                {{ 'Cancel'|trans({}, 'Account') }}
+                                </a>
+                            </div>
+                            <input name="modal" type="hidden" value="0">
+                            {{ form_end(delete_form) }}
+                        </div>
+                    </div>
+                    <div class="box-body">
 
+                    {{ form_start(edit_form) }}
+                        {{ form_widget(edit_form) }}
+                        <p>
+                            <button class="btn btn-default" type="submit">{{ 'save'|trans | capitalize }}</button>
+                        </p>
+                    {{ form_end(edit_form) }}
+                    </div>
+                </div>
                 <div class="box">
                     <div class="box-header">
                         <i class="fa fa-info-circle"></i>
@@ -141,7 +146,7 @@
                         <ul class="list-unstyled">
                             {% for board in projectBoards %}
                                 <li>
-                                    <a class="" href="{{ path('board_show', {"id":board.board_id}) }}">
+                                    <a class="" href="{{ path('board_task_kanban', {"id":board.board_id}) }}">
                                         {{ board.board_name | capitalize}}
                                     </a>
                                         <div class="progress-group" title="{{(board.countTasks-board.pendding_countTasks)}}/{{board.countTasks}}">
@@ -162,8 +167,42 @@
 
             </div>
         </div>
-
+<div id="delete_confirm" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>{{ 'Confirm delete'|trans({}, 'Project') }}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'You are about to delete an item'|trans({}, 'Project') }}, {{ 'this procedure is irreversible'|trans({}, 'Project') }}.</p>
+                <p>{{ 'Do you want to proceed?'|trans({}, 'Project') }}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger">{{ 'Yes'|trans({}, 'Project') }}</button>
+                <button class="btn btn-default" data-dismiss="modal">{{ 'No'|trans({}, 'Project') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     </section>
 
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    <script type="text/javascript">
+        function showEdit(show){
+            if(show){
+                $('#showProject').hide();
+                $('#editFormProject').show();
+            }else{
+                $('#showProject').show();
+                $('#editFormProject').hide();
+            }
+        }
+        
+    </script>
 {% endblock %}

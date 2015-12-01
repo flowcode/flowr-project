@@ -113,12 +113,16 @@ class ProjectController extends Controller
         } else {
             $spentPercentage = 0;
         }
-
+        $editForm = $this->createForm($this->get('form.type.project'), $project, array(
+            'action' => $this->generateUrl('project_update', array('id' => $project->getid())),
+            'method' => 'PUT',
+        ));
         $spentPercentage = round($spentPercentage, 2);
 
         $projectService = $this->get("flower.project");
         $projectBoards = $projectService->getBoardsWithStadistics($project);
         return array(
+            'edit_form' => $editForm->createView(),
             'project' => $project,
             'overallSpent' => $overallSpent,
             'monthSpent' => $monthSpent,

@@ -1,0 +1,24 @@
+		<div class="nav-app">
+            <ul class="nav nav-tabs ">
+                <li role="presentation" class="app-icon bg-blue">
+                    <i class="fa fa-gears"></i>
+                </li>
+                <li role="presentation" 
+                {% if app_project_overview is defined %}class="active"{% endif %}
+                >
+                    <a href="{{ path('project_dashboard') }}">{{ 'overview'|trans|capitalize }}</a>
+                </li>
+                <li role="presentation" 
+                {% if app_project_list is defined %}class="active"{% endif %}
+                >
+                    <a href="{{ path('project') }}">{{ 'List view'|trans|capitalize }}</a>
+                </li>
+                {% if is_granted('ROLE_ESTIMATIONS') %}   
+                    <li role="presentation" 
+                    {% if app_estimation is defined %}class="active"{% endif %}
+                    >
+                        <a href="{{ path('estimation') }}">{{ 'estimations'|trans|capitalize }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>

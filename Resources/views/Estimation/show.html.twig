@@ -3,17 +3,10 @@
 {% block title %}Estimation - {{ parent() }}{% endblock %}
 
 {% block body %}
-<section class="content-header">
-    <h1>{{ 'Estimation' | trans({}, 'Estimation')}}</h1>
-    <ol class="breadcrumb">
-        <li><a href={{ path('dashboard') }}><i class="fa fa-dashboard"></i> {{"Dashboard" | trans({}, 'Estimation')}}</a></li>
-        <li><a href="{{ path('estimation') }}"> {{ '%entity% list'|trans({'%entity%': 'Estimation'}, 'Estimation') }}</a></li>
-        <li class="active" >{{ '%entity%'|trans({'%entity%': 'Estimation'}, 'Estimation') }}</li>
-    </ol>
-</section>
 <section class="content">
     <div class="row">
         <div class="col-lg-4">
+            {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_estimation': true }) }} 
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"></h3>
@@ -24,12 +17,12 @@
                         <div class="btn-group record_actions">
 
                             <a class="btn btn-link btn-xs" href="{{ path('estimation_copy', {id: estimation.id}) }}">
-                                <i class="fa fa-copy"></i> {{ 'Copy'|trans({}, 'Estimation') }}
+                                {{ 'Copy'|trans({}, 'Estimation') }}
                             </a>
                             <a class="btn btn-link btn-xs" href="{{ path('estimation_edit', {id: estimation.id}) }}">
-                                <i class="fa fa-edit"></i> {{ 'Edit'|trans({}, 'Estimation') }}
+                                {{ 'Edit'|trans({}, 'Estimation') }}
                             </a>
-                            <button class="btn btn-link btn-xs" type="submit"><i class="fa fa-trash-o"></i> {{ 'Delete'|trans({}, 'Estimation') }}</button>
+                            <button class="btn btn-link btn-xs" type="submit"> {{ 'Delete'|trans({}, 'Estimation') }}</button>
 
                         </div>
 
