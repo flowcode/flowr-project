@@ -1,3 +1,6 @@
 '%entity% kanban': '%entity% kanban'
 '%entity% list': 'Lista de %entity%'
 'Create a new %entity%': 'Crear nueva %entity%'
+Due date: Vencimiento
+Type: Tipo
+Tracker: Tracker

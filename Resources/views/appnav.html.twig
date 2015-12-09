@@ -20,5 +20,10 @@
                         <a href="{{ path('estimation') }}">{{ 'estimations'|trans|capitalize }}</a>
                     </li>
                 {% endif %}
+                {% if project is defined and project.id and app_doc is defined %}
+                    <li role="presentation">
+                        <a href="{{ path('project_show',{id:project.id}) }}">{{ 'Project'|trans({},'Project')|capitalize }}</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>

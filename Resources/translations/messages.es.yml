@@ -7,3 +7,8 @@ Project: Proyectos
 'change status': 'cambiar estado'
 overview: resumen
 projects: proyectos
+
+status_backlog: en espera
+status_in_progress: en progreso
+status_testing: en prueba
+status_finished: finalizado

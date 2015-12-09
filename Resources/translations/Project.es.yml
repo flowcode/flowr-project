@@ -10,10 +10,18 @@ Edit: Editar
 Finished: Finalizado
 'No': 'No'
 Projects: Proyectos
+Project: Proyecto
 Type: Tipo
 'Yes': Si
 'You are about to delete an item': 'Usted esta por borrar un elemento'
 fixed: fixed
 'new %entity%': 'nuevo proyecto'
-ongoing: 'en desarrollo'
+ongoing: 'continuo'
 'this procedure is irreversible': 'esta accion será irreversible'
+Docs: Documentos
+Status: Estado
+Account: Cuenta
+current month spent: Horas mensuales
+current week spent: Horas semanales
+overall spent: Total registrado
+%procentaje%% of the overall estimated time: %procentaje%% del tiempo estimado.

@@ -4,18 +4,8 @@
 
 {% block body %}
     <section class="content-header">
-        <h1>
-            <a href="{{ path('account_show', { 'id': docpage.project.account.id }) }}">{{ docpage.project.account|trans}}</a>  
-            <i class="fa fa-angle-right"></i>
-            <a href="{{ path('project_show', { 'id': docpage.project.id }) }}">{{ docpage.project|trans}}</a>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href={{ path('dashboard') }}><i class="fa fa-dashboard"></i> {{"Dashboard" | trans({}, 'DocPage')}}</a></li>
-            <li><a href="{{ path('docpage') }}"> {{ '%entity% list'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</a></li>
-            <li class="active" >{{ '%entity%'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</li>
-        </ol>
-    </section>
     <section class="content">    
+        {{ include("FlowerProjectBundle::appnav.html.twig", {'project' :project, 'app_doc':true}) }} 
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title">{{ docpage.title }}</h3>                            

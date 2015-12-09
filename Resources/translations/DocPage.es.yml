@@ -1,8 +1,8 @@
-'%entity%': '%entity%'
-'%entity% List': 'Lista de %entity%'
-'%entity% creation': 'Creación de %entity%'
-'%entity% edit': 'Edición de %entity%'
-'%entity% list': 'Lista de %entity%'
+'%entity%': 'Documento'
+'%entity% List': 'Documentos'
+'%entity% creation': 'Creación de Documento'
+'%entity% edit': 'Edición de Documento'
+'%entity% list': 'Documentos'
 Actions: Acciones
 'Confirm delete': 'Confirmar borrado'
 Create: Crear
@@ -19,3 +19,6 @@ Edit: Editar
 edit: editar
 show: ver
 'this procedure is irreversible': 'esta accion será irreversible'
+Title: Titulo
+Content: Contenido
+Project: Proyecto

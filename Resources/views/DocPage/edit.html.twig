@@ -4,15 +4,8 @@
 
 {% block body %}
 
-    <section class="content-header">
-        <h1>{{ 'DocPage' | trans({}, 'DocPage')}}</h1>
-        <ol class="breadcrumb">
-            <li><a href={{ path('dashboard') }}><i class="fa fa-dashboard"></i> {{"Dashboard" | trans({}, 'DocPage')}}</a></li>
-            <li><a href="{{ path('docpage') }}"> {{ '%entity% list'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</a></li>
-            <li class="active" >{{ '%entity% edit'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</li>
-        </ol>
-    </section>    
     <section class="content">
+        {{ include("FlowerProjectBundle::appnav.html.twig", {'project' :project, 'app_doc':true}) }} 
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title">{{ '%entity% edit'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</h3>
@@ -22,7 +15,7 @@
                 {{ form_start(edit_form) }}
                 {{ form_widget(edit_form) }}
                 <p>
-                    <button class="btn btn-primary" type="submit"><i class="fa fa-edit"></i> {{ 'Edit'|trans({}, 'DocPage') }}</button>
+                    <button class="btn btn-default" type="submit">{{ 'Save'|trans({}, 'DocPage') }}</button>
                 </p>
                 {{ form_end(edit_form) }}
             </div>

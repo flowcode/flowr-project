@@ -47,8 +47,12 @@ class DocPageController extends Controller
     public function showAction(DocPage $docpage)
     {
         $deleteForm = $this->createDeleteForm($docpage->getId(), 'docpage_delete');
-
+        $project = "";
+        if($docpage->getProject()){
+            $project = $docpage->getProject();
+        }
         return array(
+            'project' => $project,
             'docpage' => $docpage,
             'delete_form' => $deleteForm->createView(),
         );
@@ -86,6 +90,7 @@ class DocPageController extends Controller
         $form = $this->createForm($this->get("form.type.docproject"), $docpage);
 
         return array(
+            'project' => $project,
             'docpage' => $docpage,
             'form' => $form->createView(),
         );
@@ -130,8 +135,12 @@ class DocPageController extends Controller
             'method' => 'PUT',
         ));
         $deleteForm = $this->createDeleteForm($docpage->getId(), 'docpage_delete');
-
+        $project = "";
+        if($docpage->getProject()){
+            $project = $docpage->getProject();
+        }
         return array(
+            'project'=> $project,
             'docpage' => $docpage,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

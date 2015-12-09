@@ -29,12 +29,25 @@
                                     <td>{{ project.description }}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">{{'Type'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.type }}</td>
+                                    <th scope="row">{{'Estimated'|trans({}, 'Project')}}</th>
+                                    <td>{{ project.estimated }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">{{'Finished'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.finished|date('y-m-d H:i') }}</td>
+                                    <td>{{ project.finished|date('fullDateTime'|trans) }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">{{'Type'|trans({}, 'Project')}}</th>
+                                    <td>{{ project.type }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row">{{'Account'|trans({}, 'Project')}}</th>
+                                    <td>{{ project.account }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">{{'Status'|trans({}, 'Project')}}</th>
+                                    <td>{{ project.status | trans}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -71,7 +84,7 @@
                 <div class="box">
                     <div class="box-header">
                         <i class="fa fa-info-circle"></i>
-                        <h3 class="box-title">Docs</h3>
+                        <h3 class="box-title">{{'Docs'|trans({},'Project')}}</h3>
                         <div class="box-tools">
                             <a href="{{ path('docpage_add_toproj', {id:project.id}) }}">
                                 <i class="fa fa-plus"></i>
@@ -99,13 +112,13 @@
                 <div class="info-box bg-green">
                     <span class="info-box-icon"><i class="ionicons ion-ios-clock"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">{{ 'overall spent' }}</span>
+                        <span class="info-box-text">{{ 'overall spent'| trans({},'Project') }}</span>
                         <span class="info-box-number">{{ overallSpent }}</span>
                         <div class="progress">
                             <div class="progress-bar" style="width: {{ overallSpentRatio }}%"></div>
                         </div>
                         <span class="progress-description">
-                            {{ overallSpentRatio }}% of the overall estimated time
+                            {{'%procentaje%% of the overall estimated time' | trans({'%procentaje%':overallSpentRatio},'Project')}}
                         </span>
                     </div><!-- /.info-box-content -->
                 </div><!-- /.info-box -->
@@ -115,7 +128,7 @@
                         <div class="info-box">
                             <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">{{ 'current month spent' }}</span>
+                                <span class="info-box-text">{{ 'current month spent'| trans({},'Project') }}</span>
                                 <span class="info-box-number">{{ monthSpent }}</span>
                             </div><!-- /.info-box-content -->
                         </div><!-- /.info-box -->
@@ -125,7 +138,7 @@
                         <div class="info-box">
                             <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">{{ 'current week spent' }}</span>
+                                <span class="info-box-text">{{ 'current week spent'| trans({},'Project') }}</span>
                                 <span class="info-box-number">{{ weekSpent }}</span>
                             </div><!-- /.info-box-content -->
                         </div><!-- /.info-box -->

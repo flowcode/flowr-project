@@ -44,9 +44,9 @@
                     {% for project in paginator %}
                         <tr>
                             <td title="{{project.description}}"><a class="btn btn-link" href="{{ path('project_show', {id: project.id}) }}">{{ project.name }}</a></td>
-                            <td>{% if project.finished %}{{ project.finished|date('Y-m-d H:i') }}{% endif %}</td>
-                            <td>{% if project.updated %}{{ project.updated|date('Y-m-d H:i') }}{% endif %}</td>
-                            <td>{% if project.created %}{{ project.created|date('Y-m-d H:i') }}{% endif %}</td>
+                            <td>{% if project.finished %}{{ project.finished|date('fullDateTime'|trans) }}{% endif %}</td>
+                            <td>{% if project.updated %}{{ project.updated|date('fullDateTime'|trans) }}{% endif %}</td>
+                            <td>{% if project.created %}{{ project.created|date('fullDateTime'|trans) }}{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
