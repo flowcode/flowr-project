@@ -29,6 +29,10 @@
                                     <td>{{ project.description }}</td>
                                 </tr>
                                 <tr>
+                                    <th scope="row">{{'Assignee'|trans({}, 'Project')|title }}</th>
+                                    <td>{{ project.assignee.getHappyName() }}</td>
+                                </tr>
+                                <tr>
                                     <th scope="row">{{'Estimated'|trans({}, 'Project')}}</th>
                                     <td>{{ project.estimated }}</td>
                                 </tr>
@@ -175,6 +179,38 @@
                         </ul>
                     </div>
                     <div class="box-footer">
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">{{ 'members'|trans|capitalize }}</h3>
+                        <div class="box-tools">
+                            <a class="btn btn-link" href="{{ path('project_add_member', { "id": project.id }) }}">
+                                <i class="fa fa-plus"></i>
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <ul class="users-list clearfix">
+                            {% for member in project.members %}
+                                <li>
+                                    {{ render(controller('FlowerUserBundle:Profile:avatar',{'user':member.user})) }}
+                                    <a class="users-list-name" href="#">
+                                        {{ member.user.getHappyName() | title }}
+                                    </a>
+                                    <span class="users-list-date">
+                                        {{ member.memberRole | title }}
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="box-footer">
+                        <a class="btn btn-link" href="{{ path('project_members_full', { "id": project.id }) }}">
+                            View All
+                        </a>
                     </div>
                 </div>
 

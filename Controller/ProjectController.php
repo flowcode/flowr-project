@@ -7,11 +7,13 @@ use Flower\CoreBundle\Form\Type\ProjectType;
 use Flower\CoreBundle\Form\Type\TaskProjectType;
 use Flower\CoreBundle\Form\Type\TaskType;
 use Flower\ModelBundle\Entity\Project\Project;
+use Flower\ModelBundle\Entity\Project\ProjectMembership;
 use Flower\ModelBundle\Entity\User\User;
 use Flower\ModelBundle\Entity\Board\TaskStatus;
 use Flower\ModelBundle\Entity\Board\TaskType as TaskType2;
 use Flower\ModelBundle\Entity\Board\Task;
 use Flower\ModelBundle\Entity\Board\Board;
+use Flower\ProjectBundle\Form\Type\ProjectMembershipType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -40,14 +42,15 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $projStatuses = $em->getRepository('FlowerModelBundle:Project\ProjectStatus')->findAll();
-        $projectRepo = $em->getRepository("FlowerModelBundle:Project\Project");
+
+        $projectSrv = $this->get('flower.project');
 
         $projects = array();
 
         foreach ($projStatuses as $projStatus) {
             $status = array();
             $status["entity"] = $projStatus;
-            $status["projects"] = $projectRepo->findByStatus($projStatus->getId());
+            $status["projects"] = $projectSrv->findByStatus($projStatus);
             $projects[] = $status; 
         }
 
@@ -87,6 +90,16 @@ class ProjectController extends Controller
         
         $qb = $em->getRepository('FlowerModelBundle:Project\Project')->createQueryBuilder('p');
         $this->addQueryBuilderSort($qb, 'project');
+
+        $user = $this->getUser();
+        $orgPositionSrv = $this->container->get('user.service.orgposition');
+        $orgPositionSrv->getLowerPositionUsers($user);
+        $qb->join("p.members", "m", "with", "1=1");
+        $qb->andWhere("( p.assignee IN (:users) OR m.user IN (:members))")
+            ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user))
+            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user))
+        ;
+
         $paginator = $this->get('knp_paginator')->paginate($qb, $request->query->get('page', 1), 20);
 
         return array(
@@ -325,6 +338,7 @@ class ProjectController extends Controller
             'form' => $form->createView(),
         );
     }
+
     /**
      * Creates a new Board entity.
      *
@@ -347,6 +361,76 @@ class ProjectController extends Controller
 
         return array(
             'board' => $board,
+            'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     * Add member.
+     *
+     * @Route("/{id}/members", name="project_members_full")
+     * @Method("GET")
+     * @Template("FlowerProjectBundle:Project:members.html.twig")
+     */
+    public function membersAction(Request $request, Project $project)
+    {
+
+        return array(
+            'project' => $project,
+        );
+    }
+
+    /**
+     * Add member.
+     *
+     * @Route("/{id}/addmember", name="project_add_member")
+     * @Method("GET")
+     * @Template("FlowerProjectBundle:Project:addmember.html.twig")
+     */
+    public function addMemberAction(Request $request, Project $project)
+    {
+        $projectMembership = new ProjectMembership();
+        $projectMembership->setProject($project);
+
+        $form = $this->createForm(new ProjectMembershipType(), $projectMembership, array(
+            'action' => $this->generateUrl('project_add_member_save',array("id" => $project->getId())),
+            'method' => 'POST',
+        ));
+
+
+        return array(
+            'projectMembership' => $projectMembership,
+            'form'   => $form->createView(),
+        );
+    }
+
+    /**
+     * Add member.
+     *
+     * @Route("/{id}/addmember", name="project_add_member_save")
+     * @Method("POST")
+     * @Template("FlowerProjectBundle:Project:addmember.html.twig")
+     */
+    public function addMemberSaveAction(Request $request, Project $project)
+    {
+        $projectMembership = new ProjectMembership();
+        $projectMembership->setProject($project);
+
+        $form = $this->createForm(new ProjectMembershipType(), $projectMembership);
+
+        if ($form->handleRequest($request)->isValid()) {
+
+            $project->addProjectMembership($projectMembership);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($projectMembership);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('project_show', array('id' => $project->getId())));
+        }
+
+        return array(
+            'projectMembership' => $projectMembership,
             'form'   => $form->createView(),
         );
     }

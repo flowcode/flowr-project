@@ -81,10 +81,29 @@ class Project
     protected $status;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="dailyWorkingHours", type="integer", nullable=true)
+     */
+    protected $dailyWorkingHours;
+
+    /**
      * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Project\DocPage", mappedBy="project")
      * @Groups({"public_api"})
      * */
     protected $docPages;
+
+    /**
+     * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\User\User")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * */
+    protected $assignee;
+
+    /**
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Project\ProjectMembership", mappedBy="project")
+     * @Groups({"public_api"})
+     * */
+    protected $members;
 
         /**
      * @ManyToMany(targetEntity="\Flower\ModelBundle\Entity\Board\Board")
@@ -131,6 +150,7 @@ class Project
     {
         $this->enabled = true;
         $this->docPages = new ArrayCollection();
+        $this->members = new ArrayCollection();
         $this->boards = new ArrayCollection();
     }
 
@@ -444,4 +464,85 @@ class Project
     {
         return $this->boards;
     }
+
+
+    /**
+     * Add projectMembership
+     *
+     * @param \Flower\ModelBundle\Entity\Project\ProjectMembership $projectMembership
+     * @return Project
+     */
+    public function addProjectMembership(\Flower\ModelBundle\Entity\Project\ProjectMembership $projectMembership)
+    {
+        $this->members[] = $projectMembership;
+
+        return $this;
+    }
+
+    /**
+     * Remove docPages
+     *
+     * @param \Flower\ModelBundle\Entity\Project\ProjectMembership $projectMembership
+     */
+    public function removeProjectMembership(\Flower\ModelBundle\Entity\Project\ProjectMembership $projectMembership)
+    {
+        $this->members->removeElement($projectMembership);
+    }
+
+    /**
+     * Get members
+     *
+     * @return Collection
+     */
+    public function getMembers()
+    {
+        return $this->members;
+    }
+
+    /**
+     * Set assignee
+     *
+     * @param \Flower\ModelBundle\Entity\User\User $assignee
+     * @return Project
+     */
+    public function setAssignee(\Flower\ModelBundle\Entity\User\User $assignee = null)
+    {
+        $this->assignee = $assignee;
+
+        return $this;
+    }
+
+    /**
+     * Get assignee
+     *
+     * @return \Flower\ModelBundle\Entity\User\User
+     */
+    public function getAssignee()
+    {
+        return $this->assignee;
+    }
+
+    /**
+     * Set dailyWorkingHours
+     *
+     * @param integer $dailyWorkingHours
+     * @return Project
+     */
+    public function setDailyWorkingHours($dailyWorkingHours)
+    {
+        $this->dailyWorkingHours = $dailyWorkingHours;
+
+        return $this;
+    }
+
+    /**
+     * Get dailyWorkingHours
+     *
+     * @return integer
+     */
+    public function getDailyWorkingHours()
+    {
+        return $this->dailyWorkingHours;
+    }
+
 }

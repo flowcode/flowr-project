@@ -35,6 +35,7 @@
                 <thead>
                     <tr>
                         <th scope="col">{{ thead('project', 'name', 'Name') }}</th>
+                        <th scope="col">{{ thead('project', 'assignee', 'Assignee') }}</th>
                         <th scope="col">{{ thead('project', 'finished', 'Finished') }}</th>
                         <th scope="col">{{ thead('project', 'updated', 'Updated') }}</th>
                         <th scope="col">{{ thead('project', 'created', 'Created') }}</th>
@@ -44,6 +45,7 @@
                     {% for project in paginator %}
                         <tr>
                             <td title="{{project.description}}"><a class="btn btn-link" href="{{ path('project_show', {id: project.id}) }}">{{ project.name }}</a></td>
+                            <td>{{ project.assignee.getHappyName() }}</td>
                             <td>{% if project.finished %}{{ project.finished|date('fullDateTime'|trans) }}{% endif %}</td>
                             <td>{% if project.updated %}{{ project.updated|date('fullDateTime'|trans) }}{% endif %}</td>
                             <td>{% if project.created %}{{ project.created|date('fullDateTime'|trans) }}{% endif %}</td>

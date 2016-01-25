@@ -27,6 +27,8 @@ class ProjectType extends AbstractType
         $builder
                 ->add('name')
                 ->add('description', null, array('required' => false))
+                ->add('assignee')
+                ->add('dailyWorkingHours', null, array('required' => false))
                 ->add('estimated', null, array('required' => false))
                 ->add('finished', null, array('required' => false))
                 ->add('enabled', null, array('required' => false))

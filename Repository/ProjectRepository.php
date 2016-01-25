@@ -21,6 +21,23 @@ class ProjectRepository extends EntityRepository
         $qb->orderBy("p.updated", "DESC");
         return $qb->getQuery()->getResult();
     }
+
+    public function findAllQb($alias = 'p', $enabled = true)
+    {
+        $qb = $this->createQueryBuilder($alias);
+        $qb->andWhere("p.enabled = :enabled")->setParameter("enabled", $enabled);
+        $qb->orderBy("p.updated", "DESC");
+        return $qb;
+    }
+
+    public function findByStatusQb($statusId, $alias = 'p')
+    {
+        $qb = $this->createQueryBuilder($alias);
+        $qb->where("p.status = :status_id")->setParameter("status_id", $statusId);
+        $qb->andWhere("p.enabled = :enabled")->setParameter("enabled", true);
+        $qb->orderBy("p.updated", "DESC");
+        return $qb;
+    }
     
     public function getCountByStatus($userAccountId, $statusId)
     {
