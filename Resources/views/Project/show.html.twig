@@ -5,15 +5,29 @@
 {% block body %}
     <section class="content">
         <div class="row">
+            {{ include("FlowerProjectBundle::appnav.html.twig", {  }) }}
             <div class="col-md-6">
-                {{ include("FlowerProjectBundle::appnav.html.twig", {  }) }} 
                 <div class="box" id='showProject'>
+
                     <div class="box-header">
-                        <h3 class="box-title">{{ project.name|capitalize }}</h3>
+                        <h3 class="box-title">
+                            {% if project.status == 'status_backlog' %}
+                                <i class="ionicons ion-ios-circle-outline text-yellow"
+                                   title="{{ project.status|trans }}"></i>
+                            {% elseif project.status == 'status_in_progress' %}
+                                <i class="ionicons ion-ios-circle-filled text-green"
+                                   title="{{ project.status|trans }}"></i>
+                            {% else %}
+                                <i class="ionicons ion-ios-circle-outline text-muted"
+                                   title="{{ project.status|trans }}"></i>
+                            {% endif %}
+                            {{ project.name|capitalize }}
+                        </h3>
                         <div class="box-tools pull-right">
                             {{ form_start(delete_form) }}
                             {{ form_widget(delete_form) }}
-                            <button class="btn btn-link btn-xs" type="submit">{{ 'Delete'|trans({}, 'Project') }}</button>
+                            <button class="btn btn-link btn-xs"
+                                    type="submit">{{ 'Delete'|trans({}, 'Project') }}</button>
                             <a class="btn btn-link  btn-sm" onclick="showEdit(true)">
                                 {{ 'Edit'|trans({}, 'Product') }}
                             </a>
@@ -22,53 +36,28 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        <table class="table table-condensed">
-                            <tbody>
-                                <tr>
-                                    <th scope="row">{{'Description'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.description }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">{{'Assignee'|trans({}, 'Project')|title }}</th>
-                                    <td>{{ project.assignee.getHappyName() }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">{{'Estimated'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.estimated }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">{{'Finished'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.finished|date('fullDateTime'|trans) }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">{{'Type'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.type }}</td>
-                                </tr>
-
-                                <tr>
-                                    <th scope="row">{{'Account'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.account }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">{{'Status'|trans({}, 'Project')}}</th>
-                                    <td>{{ project.status | trans}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        {{ 'Project type'|trans }}: {{ project.type|trans }}.<br>
+                        {{ 'Estimated in '|trans({}, 'Project') }}: {{ project.estimated }} {{ 'hours'|trans }}.<br>
+                        {{ 'Builded For' }}: {{ project.account }}.<br>
+                        <hr>
+                        <div>
+                            {{ project.description|raw }}
+                        </div>
                     </div>
                     <div class="box-footer">
 
                     </div>
                 </div>
-                <div class="box" id='editFormProject'  style="display: none;">
+                <div class="box" id='editFormProject' style="display: none;">
                     <div class="box-header">
                         <div class="box-tools">
                             {{ form_start(delete_form) }}
                             {{ form_widget(delete_form) }}
                             <div class="btn-group record_actions">
-                                <button class="btn btn-link btn-sm" type="submit"> {{ 'Delete'|trans({}, 'Product') }}</button>
+                                <button class="btn btn-link btn-sm"
+                                        type="submit"> {{ 'Delete'|trans({}, 'Product') }}</button>
                                 <a class="btn btn-link  btn-sm" onclick="showEdit(false)">
-                                {{ 'Cancel'|trans({}, 'Account') }}
+                                    {{ 'Cancel'|trans({}, 'Account') }}
                                 </a>
                             </div>
                             <input name="modal" type="hidden" value="0">
@@ -77,18 +66,18 @@
                     </div>
                     <div class="box-body">
 
-                    {{ form_start(edit_form) }}
+                        {{ form_start(edit_form) }}
                         {{ form_widget(edit_form) }}
                         <p>
                             <button class="btn btn-default" type="submit">{{ 'save'|trans | capitalize }}</button>
                         </p>
-                    {{ form_end(edit_form) }}
+                        {{ form_end(edit_form) }}
                     </div>
                 </div>
                 <div class="box">
                     <div class="box-header">
                         <i class="fa fa-info-circle"></i>
-                        <h3 class="box-title">{{'Docs'|trans({},'Project')}}</h3>
+                        <h3 class="box-title">{{ 'Docs'|trans({},'Project') }}</h3>
                         <div class="box-tools">
                             <a href="{{ path('docpage_add_toproj', {id:project.id}) }}">
                                 <i class="fa fa-plus"></i>
@@ -112,75 +101,76 @@
                 </div>
             </div>
             <div class="col-md-6">
-
-                <div class="info-box bg-green">
-                    <span class="info-box-icon"><i class="ionicons ion-ios-clock"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">{{ 'overall spent'| trans({},'Project') }}</span>
-                        <span class="info-box-number">{{ overallSpent }}</span>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: {{ overallSpentRatio }}%"></div>
-                        </div>
-                        <span class="progress-description">
-                            {{'%procentaje%% of the overall estimated time' | trans({'%procentaje%':overallSpentRatio},'Project')}}
-                        </span>
-                    </div><!-- /.info-box-content -->
-                </div><!-- /.info-box -->
-
                 <div class="row">
-                    <div class="col-sm-6">
-                        <div class="info-box">
-                            <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">{{ 'current month spent'| trans({},'Project') }}</span>
-                                <span class="info-box-number">{{ monthSpent }}</span>
-                            </div><!-- /.info-box-content -->
-                        </div><!-- /.info-box -->
-                    </div>
+                    <div class="col-md-6">
+                        <div class="box box-solid">
+                            <div class="box-body">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>{{ 'time tracking stats'|trans|title }}</th>
+                                        <th>Hours</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ 'overall spent'| trans({},'Project') }}</td>
+                                        <td>{{ overallSpent }}</td>
+                                        <td>{{ overallSpentRatio }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'current month spent'| trans({},'Project') }}</td>
+                                        <td colspan="2">{{ monthSpent }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ 'current week spent'| trans({},'Project') }}</td>
+                                        <td colspan="2">{{ weekSpent }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                    <div class="col-sm-6">
-                        <div class="info-box">
-                            <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">{{ 'current week spent'| trans({},'Project') }}</span>
-                                <span class="info-box-number">{{ weekSpent }}</span>
-                            </div><!-- /.info-box-content -->
-                        </div><!-- /.info-box -->
-                    </div>
-
-                </div>
-
-                <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">{{ 'boards'|trans|capitalize }}</h3>
-                        <div class="box-tools">
-                            <a class="btn btn-link" href="{{ path('board_new_to_project', { "id": project.id }) }}">
-                                <i class="fa fa-plus"></i>
-                            </a>
                         </div>
                     </div>
-                    <div class="box-body">
-                        <ul class="list-unstyled">
-                            {% for board in projectBoards %}
-                                <li>
-                                    <a class="" href="{{ path('board_task_kanban', {"id":board.board_id}) }}">
-                                        {{ board.board_name | capitalize}}
+                    <div class="col-md-6">
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">{{ 'boards'|trans|capitalize }}</h3>
+                                <div class="box-tools">
+                                    <a class="btn btn-link"
+                                       href="{{ path('board_new_to_project', { "id": project.id }) }}">
+                                        <i class="fa fa-plus"></i>
                                     </a>
-                                        <div class="progress-group" title="{{(board.countTasks-board.pendding_countTasks)}}/{{board.countTasks}}">
-                                            <span class="progress-number">{{100*((board.countTasks-board.pendding_countTasks)/board.
-                                        countTasks) | number_format(3, '.', ',')}}%</span>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <ul class="list-unstyled">
+                                    {% for board in projectBoards %}
+                                        <li>
+                                            <a class="" href="{{ path('board_task_kanban', {"id":board.board_id}) }}">
+                                                {{ board.board_name | capitalize }}
+                                            </a>
+                                            <div class="progress-group"
+                                                 title="{{ (board.countTasks-board.pendding_countTasks) }}/{{ board.countTasks }}">
+                                            <span class="progress-number">{{ 100*((board.countTasks-board.pendding_countTasks)/board.
+                                                countTasks) | number_format(3, '.', ',') }}%</span>
 
-                                            <div class="progress xxs">
-                                              <div class="progress-bar progress-bar-red" style="width: {{100*((board.countTasks-board.pendding_countTasks)/board.countTasks)}}%;"></div>
+                                                <div class="progress xxs">
+                                                    <div class="progress-bar progress-bar-red"
+                                                         style="width: {{ 100*((board.countTasks-board.pendding_countTasks)/board.countTasks) }}%;"></div>
+                                                </div>
                                             </div>
-                                          </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="box-footer">
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="box-footer">
+                            </div>
+                        </div>
                     </div>
                 </div>
+
 
                 <div class="box">
                     <div class="box-header">
@@ -189,7 +179,6 @@
                             <a class="btn btn-link" href="{{ path('project_add_member', { "id": project.id }) }}">
                                 <i class="fa fa-plus"></i>
                             </a>
-
                         </div>
                     </div>
                     <div class="box-body">
@@ -200,7 +189,10 @@
                                     <a class="users-list-name" href="#">
                                         {{ member.user.getHappyName() | title }}
                                     </a>
-                                    <span class="users-list-date">
+                                    <span class="users-list-date {% if project.assignee.id == member.user.id %}text-green{% endif %}">
+                                        {% if project.assignee.id == member.user.id %}
+                                            {{ 'assignee'|trans|title }},
+                                        {% endif %}
                                         {{ member.memberRole | title }}
                                     </span>
                                 </li>
@@ -216,24 +208,25 @@
 
             </div>
         </div>
-<div id="delete_confirm" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3>{{ 'Confirm delete'|trans({}, 'Project') }}</h3>
-            </div>
-            <div class="modal-body">
-                <p>{{ 'You are about to delete an item'|trans({}, 'Project') }}, {{ 'this procedure is irreversible'|trans({}, 'Project') }}.</p>
-                <p>{{ 'Do you want to proceed?'|trans({}, 'Project') }}</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger">{{ 'Yes'|trans({}, 'Project') }}</button>
-                <button class="btn btn-default" data-dismiss="modal">{{ 'No'|trans({}, 'Project') }}</button>
+        <div id="delete_confirm" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>{{ 'Confirm delete'|trans({}, 'Project') }}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ 'You are about to delete an item'|trans({}, 'Project') }}
+                            , {{ 'this procedure is irreversible'|trans({}, 'Project') }}.</p>
+                        <p>{{ 'Do you want to proceed?'|trans({}, 'Project') }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-danger">{{ 'Yes'|trans({}, 'Project') }}</button>
+                        <button class="btn btn-default" data-dismiss="modal">{{ 'No'|trans({}, 'Project') }}</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
     </section>
 
@@ -243,15 +236,15 @@
 
     {{ parent() }}
     <script type="text/javascript">
-        function showEdit(show){
-            if(show){
+        function showEdit(show) {
+            if (show) {
                 $('#showProject').hide();
                 $('#editFormProject').show();
-            }else{
+            } else {
                 $('#showProject').show();
                 $('#editFormProject').hide();
             }
         }
-        
+
     </script>
 {% endblock %}
