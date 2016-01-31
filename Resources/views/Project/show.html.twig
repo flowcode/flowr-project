@@ -21,7 +21,7 @@
                                 <i class="ionicons ion-ios-circle-outline text-muted"
                                    title="{{ project.status|trans }}"></i>
                             {% endif %}
-                            {{ project.name|capitalize }}
+                            {{ project.name|title }}
                         </h3>
                         <div class="box-tools pull-right">
                             {{ form_start(delete_form) }}
@@ -69,7 +69,7 @@
                         {{ form_start(edit_form) }}
                         {{ form_widget(edit_form) }}
                         <p>
-                            <button class="btn btn-default" type="submit">{{ 'save'|trans | capitalize }}</button>
+                            <button class="btn btn-default" type="submit">{{ 'save'|trans | title }}</button>
                         </p>
                         {{ form_end(edit_form) }}
                     </div>
@@ -89,7 +89,7 @@
                             {% for page in project.docPages %}
                                 <li>
                                     <a href="{{ path('docpage_show', {id:page.id}) }}">
-                                        {{ page.title|capitalize }}
+                                        {{ page.title|title }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -117,7 +117,17 @@
                                     <tr>
                                         <td>{{ 'overall spent'| trans({},'Project') }}</td>
                                         <td>{{ overallSpent }}</td>
-                                        <td>{{ overallSpentRatio }}</td>
+                                        <td>
+                                            {% if overallSpentRatio < 100 %}
+                                            <span class="text-green">
+                                                <i class="fa fa-caret-up"></i>{{ overallSpentRatio }}%
+                                            </span>
+                                            {% else %}
+                                            <span class="text-red">
+                                                <i class="fa fa-caret-down"></i>{{ overallSpentRatio }}%
+                                            </span>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>{{ 'current month spent'| trans({},'Project') }}</td>
@@ -136,7 +146,7 @@
                     <div class="col-md-6">
                         <div class="box">
                             <div class="box-header">
-                                <h3 class="box-title">{{ 'boards'|trans|capitalize }}</h3>
+                                <h3 class="box-title">{{ 'boards'|trans|title }}</h3>
                                 <div class="box-tools">
                                     <a class="btn btn-link"
                                        href="{{ path('board_new_to_project', { "id": project.id }) }}">
@@ -149,7 +159,7 @@
                                     {% for board in projectBoards %}
                                         <li>
                                             <a class="" href="{{ path('board_task_kanban', {"id":board.board_id}) }}">
-                                                {{ board.board_name | capitalize }}
+                                                {{ board.board_name | title }}
                                             </a>
                                             <div class="progress-group"
                                                  title="{{ (board.countTasks-board.pendding_countTasks) }}/{{ board.countTasks }}">
@@ -174,7 +184,7 @@
 
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">{{ 'members'|trans|capitalize }}</h3>
+                        <h3 class="box-title">{{ 'members'|trans|title }}</h3>
                         <div class="box-tools">
                             <a class="btn btn-link" href="{{ path('project_add_member', { "id": project.id }) }}">
                                 <i class="fa fa-plus"></i>

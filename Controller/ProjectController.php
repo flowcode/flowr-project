@@ -6,6 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 use Flower\CoreBundle\Form\Type\ProjectType;
 use Flower\CoreBundle\Form\Type\TaskProjectType;
 use Flower\CoreBundle\Form\Type\TaskType;
+use Flower\ModelBundle\Entity\Board\History;
 use Flower\ModelBundle\Entity\Project\Project;
 use Flower\ModelBundle\Entity\Project\ProjectMembership;
 use Flower\ModelBundle\Entity\User\User;
@@ -180,6 +181,8 @@ class ProjectController extends Controller
             $em->persist($project);
             $em->flush();
 
+            $this->get('board.service.history')->addSimpleUserActivity(History::TYPE_PROJECT, $this->getUser(), $project, History::CRUD_CREATE);
+
             return $this->redirect($this->generateUrl('project_show', array('id' => $project->getId())));
         }
 
@@ -226,6 +229,8 @@ class ProjectController extends Controller
         ));
         if ($editForm->handleRequest($request)->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            $this->get('board.service.history')->addSimpleUserActivity(History::TYPE_PROJECT, $this->getUser(), $project, History::CRUD_UPDATE);
 
             return $this->redirect($this->generateUrl('project_show', array('id' => $project->getId())));
         }
