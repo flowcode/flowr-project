@@ -35,22 +35,23 @@ class ProjectService implements ContainerAwareInterface
         $this->entityManager = $this->container->get("doctrine.orm.entity_manager");
     }
 
-    public function findAll(){
+    public function findAll()
+    {
         $alias = 'p';
         $qb = $this->entityManager->getRepository()->findAllQb();
         $orgPositionSrv = $this->container->get('user.service.orgposition');
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        $qb->join($alias.".members", "m", "with", "1=1");
+        $qb->join($alias . ".members", "m", "with", "1=1");
         $qb->andWhere("( p.assignee IN (:users) OR m.user IN (:members))")
-            ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user))
-            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user))
-        ;
+            ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user, true))
+            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user, true));
 
         return $qb->getQuery()->getResult();
     }
 
-    public function findByStatus(ProjectStatus $projectStatus){
+    public function findByStatus(ProjectStatus $projectStatus)
+    {
         $alias = 'p';
 
         $qb = $this->entityManager->getRepository('FlowerModelBundle:Project\Project')->findByStatusQb($projectStatus->getId(), $alias);
@@ -58,11 +59,10 @@ class ProjectService implements ContainerAwareInterface
         $orgPositionSrv = $this->container->get('user.service.orgposition');
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        $qb->join($alias.".members", "m", "with", "1=1");
+        $qb->join($alias . ".members", "m", "with", "1=1");
         $qb->andWhere("( p.assignee IN (:users) OR m.user IN (:members))")
             ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user))
-            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user))
-        ;
+            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user));
 
         return $qb->getQuery()->getResult();
     }
