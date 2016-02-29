@@ -52,7 +52,7 @@ class ProjectController extends Controller
             $status = array();
             $status["entity"] = $projStatus;
             $status["projects"] = $projectSrv->findByStatus($projStatus);
-            $projects[] = $status; 
+            $projects[] = $status;
         }
 
         return array(
@@ -88,7 +88,7 @@ class ProjectController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        
+
         $qb = $em->getRepository('FlowerModelBundle:Project\Project')->createQueryBuilder('p');
         $this->addQueryBuilderSort($qb, 'project');
 
@@ -97,9 +97,8 @@ class ProjectController extends Controller
         $orgPositionSrv->getLowerPositionUsers($user);
         $qb->join("p.members", "m", "with", "1=1");
         $qb->andWhere("( p.assignee IN (:users) OR m.user IN (:members))")
-            ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user))
-            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user))
-        ;
+            ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user, true))
+            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user, true));
 
         $paginator = $this->get('knp_paginator')->paginate($qb, $request->query->get('page', 1), 20);
 
@@ -133,6 +132,9 @@ class ProjectController extends Controller
         ));
         $spentPercentage = round($spentPercentage, 2);
 
+        /* next events */
+        $nextEvents = $em->getRepository('FlowerModelBundle:Planner\Event')->findBy(array("project" => $project), array("startDate" => "ASC"), 5);
+
         $projectService = $this->get("flower.project");
         $projectBoards = $projectService->getBoardsWithStadistics($project);
         return array(
@@ -143,6 +145,7 @@ class ProjectController extends Controller
             'weekSpent' => $weekSpent,
             'projectBoards' => $projectBoards,
             'overallSpentRatio' => $spentPercentage,
+            'nextEvents' => $nextEvents,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -244,7 +247,6 @@ class ProjectController extends Controller
     }
 
 
-
     /**
      * Deletes a Project entity.
      *
@@ -266,18 +268,18 @@ class ProjectController extends Controller
     /**
      * Create Delete form
      *
-     * @param integer                       $id
-     * @param string                        $route
+     * @param integer $id
+     * @param string $route
      * @return Form
      */
     protected function createDeleteForm($id, $route)
     {
         return $this->createFormBuilder(null, array('attr' => array('id' => 'delete')))
-                        ->setAction($this->generateUrl($route, array('id' => $id)))
-                        ->setMethod('DELETE')
-                        ->getForm()
-        ;
+            ->setAction($this->generateUrl($route, array('id' => $id)))
+            ->setMethod('DELETE')
+            ->getForm();
     }
+
     /**
      * Save order.
      *
@@ -291,9 +293,9 @@ class ProjectController extends Controller
     }
 
     /**
-     * @param string $name  session name
+     * @param string $name session name
      * @param string $field field name
-     * @param string $type  sort type ("ASC"/"DESC")
+     * @param string $type sort type ("ASC"/"DESC")
      */
     protected function setOrder($name, $field, $type = 'ASC')
     {
@@ -313,7 +315,7 @@ class ProjectController extends Controller
 
     /**
      * @param QueryBuilder $qb
-     * @param string       $name
+     * @param string $name
      */
     protected function addQueryBuilderSort(QueryBuilder $qb, $name)
     {
@@ -335,9 +337,9 @@ class ProjectController extends Controller
     {
         $board = new Board();
         $form = $this->createForm($this->get("form.type.board"), $board, array(
-                    'action' => $this->generateUrl('board_new_to_project_create',array("id" => $project->getId())),
-                    'method' => 'POST',
-                ));
+            'action' => $this->generateUrl('board_new_to_project_create', array("id" => $project->getId())),
+            'method' => 'POST',
+        ));
         return array(
             'board' => $board,
             'form' => $form->createView(),
@@ -366,7 +368,7 @@ class ProjectController extends Controller
 
         return array(
             'board' => $board,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -398,14 +400,14 @@ class ProjectController extends Controller
         $projectMembership->setProject($project);
 
         $form = $this->createForm(new ProjectMembershipType(), $projectMembership, array(
-            'action' => $this->generateUrl('project_add_member_save',array("id" => $project->getId())),
+            'action' => $this->generateUrl('project_add_member_save', array("id" => $project->getId())),
             'method' => 'POST',
         ));
 
 
         return array(
             'projectMembership' => $projectMembership,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -436,7 +438,7 @@ class ProjectController extends Controller
 
         return array(
             'projectMembership' => $projectMembership,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 }

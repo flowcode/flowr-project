@@ -99,90 +99,8 @@
 
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="box box-solid">
-                            <div class="box-body">
-                                <table class="table table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th>{{ 'time tracking stats'|trans|title }}</th>
-                                        <th>Hours</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>{{ 'overall spent'| trans({},'Project') }}</td>
-                                        <td>{{ overallSpent }}</td>
-                                        <td>
-                                            {% if overallSpentRatio < 100 %}
-                                            <span class="text-green">
-                                                <i class="fa fa-caret-up"></i>{{ overallSpentRatio }}%
-                                            </span>
-                                            {% else %}
-                                            <span class="text-red">
-                                                <i class="fa fa-caret-down"></i>{{ overallSpentRatio }}%
-                                            </span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ 'current month spent'| trans({},'Project') }}</td>
-                                        <td colspan="2">{{ monthSpent }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>{{ 'current week spent'| trans({},'Project') }}</td>
-                                        <td colspan="2">{{ weekSpent }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="box">
-                            <div class="box-header">
-                                <h3 class="box-title">{{ 'boards'|trans|title }}</h3>
-                                <div class="box-tools">
-                                    <a class="btn btn-link"
-                                       href="{{ path('board_new_to_project', { "id": project.id }) }}">
-                                        <i class="fa fa-plus"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="box-body">
-                                <ul class="list-unstyled">
-                                    {% for board in projectBoards %}
-                                        <li>
-                                            <a class="" href="{{ path('board_task_kanban', {"id":board.board_id}) }}">
-                                                {{ board.board_name | title }}
-                                            </a>
-                                            <div class="progress-group"
-                                                 title="{{ (board.countTasks-board.pendding_countTasks) }}/{{ board.countTasks }}">
-                                            <span class="progress-number">{{ 100*((board.countTasks-board.pendding_countTasks)/board.
-                                                countTasks) | number_format(3, '.', ',') }}%</span>
-
-                                                <div class="progress xxs">
-                                                    <div class="progress-bar progress-bar-red"
-                                                         style="width: {{ 100*((board.countTasks-board.pendding_countTasks)/board.countTasks) }}%;"></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <div class="box-footer">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
                 <div class="box">
+
                     <div class="box-header">
                         <h3 class="box-title">{{ 'members'|trans|title }}</h3>
                         <div class="box-tools">
@@ -215,6 +133,112 @@
                         </a>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">{{ 'next events'|trans|capitalize }}</h3>
+                        <div class="box-tools">
+                            <a class="btn btn-link" href="#" onclick="quickEvent()">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <ul class="products-list product-list-in-box">
+                            {% for event in nextEvents %}
+                                <li class="item cursor-pointer">
+                                    <a class="product-title" href="#">
+                                        {{ event.title|title }}
+                                        <small class="text-muted pull-right">
+                                            <i class="fa fa-calendar"></i> {{ event.startDate|date("Y/m/d h:m") }}
+                                        </small>
+                                    </a>
+                                    <span class="product-description">
+                                        {{ event.description }}
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="box-footer">
+                    </div>
+                </div>
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">{{ 'boards'|trans|title }}</h3>
+                        <div class="box-tools">
+                            <a class="btn btn-link"
+                               href="{{ path('board_new_to_project', { "id": project.id }) }}">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <ul class="list-unstyled">
+                            {% for board in projectBoards %}
+                                <li>
+                                    <a class="" href="{{ path('board_task_kanban', {"id":board.board_id}) }}">
+                                        {{ board.board_name | title }}
+                                    </a>
+                                    <div class="progress-group"
+                                         title="{{ (board.countTasks-board.pendding_countTasks) }}/{{ board.countTasks }}">
+                                            <span class="progress-number">{{ 100*((board.countTasks-board.pendding_countTasks)/board.
+                                                countTasks) | number_format(3, '.', ',') }}%</span>
+
+                                        <div class="progress xxs">
+                                            <div class="progress-bar progress-bar-red"
+                                                 style="width: {{ 100*((board.countTasks-board.pendding_countTasks)/board.countTasks) }}%;"></div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="box-footer">
+                    </div>
+                </div>
+
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th>{{ 'time tracking stats'|trans|title }}</th>
+                                <th>Hours</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ 'overall spent'| trans({},'Project') }}</td>
+                                <td>{{ overallSpent }}</td>
+                                <td>
+                                    {% if overallSpentRatio < 100 %}
+                                        <span class="text-green">
+                                                <i class="fa fa-caret-up"></i>{{ overallSpentRatio }}%
+                                            </span>
+                                    {% else %}
+                                        <span class="text-red">
+                                                <i class="fa fa-caret-down"></i>{{ overallSpentRatio }}%
+                                            </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'current month spent'| trans({},'Project') }}</td>
+                                <td colspan="2">{{ monthSpent }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'current week spent'| trans({},'Project') }}</td>
+                                <td colspan="2">{{ weekSpent }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
 
             </div>
         </div>
@@ -246,6 +270,7 @@
 
     {{ parent() }}
     <script type="text/javascript">
+        var quick_event_url = "{{ path('event_new_quick') }}?project={{ project.id }}";
         function showEdit(show) {
             if (show) {
                 $('#showProject').hide();

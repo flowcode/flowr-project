@@ -105,7 +105,7 @@ class Project
      * */
     protected $members;
 
-        /**
+    /**
      * @ManyToMany(targetEntity="\Flower\ModelBundle\Entity\Board\Board")
      * @JoinTable(name="project_boards",
      *      joinColumns={@JoinColumn(name="project_id", referencedColumnName="id")},
@@ -113,6 +113,11 @@ class Project
      *      )
      **/
     protected $boards;
+
+    /**
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Planner\Event", mappedBy="project")
+     */
+    private $events;
 
     /**
      * @var DateTime
@@ -152,6 +157,7 @@ class Project
         $this->docPages = new ArrayCollection();
         $this->members = new ArrayCollection();
         $this->boards = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     /**
@@ -409,6 +415,7 @@ class Project
     {
         return $this->docPages;
     }
+
     /**
      * Set type
      *
@@ -425,7 +432,7 @@ class Project
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -544,5 +551,23 @@ class Project
     {
         return $this->dailyWorkingHours;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param mixed $events
+     */
+    public function setEvents($events)
+    {
+        $this->events = $events;
+    }
+
+
 
 }
