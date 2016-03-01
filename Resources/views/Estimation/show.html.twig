@@ -2,104 +2,117 @@
 
 {% block title %}Estimation - {{ parent() }}{% endblock %}
 
+{% block app_menu %}
+    {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_estimation': true }) }}
+{% endblock %}
+
 {% block body %}
-<section class="content">
-    <div class="row">
-        <div class="col-lg-4">
-            {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_estimation': true }) }} 
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title"></h3>
-                    <div class="box-tools">
-                        {{ form_start(delete_form) }}
-                        {{ form_widget(delete_form) }}
+    <section class="content-header">
+        <h1>{{ 'estimations'|trans|title }}</h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title"></h3>
+                        <div class="box-tools">
+                            {{ form_start(delete_form) }}
+                            {{ form_widget(delete_form) }}
 
-                        <div class="btn-group record_actions">
+                            <div class="btn-group record_actions">
 
-                            <a class="btn btn-link btn-xs" href="{{ path('estimation_copy', {id: estimation.id}) }}">
-                                {{ 'Copy'|trans({}, 'Estimation') }}
-                            </a>
-                            <a class="btn btn-link btn-xs" href="{{ path('estimation_edit', {id: estimation.id}) }}">
-                                {{ 'Edit'|trans({}, 'Estimation') }}
-                            </a>
-                            <button class="btn btn-link btn-xs" type="submit"> {{ 'Delete'|trans({}, 'Estimation') }}</button>
+                                <a class="btn btn-link btn-xs"
+                                   href="{{ path('estimation_copy', {id: estimation.id}) }}">
+                                    {{ 'Copy'|trans({}, 'Estimation') }}
+                                </a>
+                                <a class="btn btn-link btn-xs"
+                                   href="{{ path('estimation_edit', {id: estimation.id}) }}">
+                                    {{ 'Edit'|trans({}, 'Estimation') }}
+                                </a>
+                                <button class="btn btn-link btn-xs"
+                                        type="submit"> {{ 'Delete'|trans({}, 'Estimation') }}</button>
 
-                        </div>
+                            </div>
 
-                        <input name="modal" type="hidden" value="0">
-                        {{ form_end(delete_form) }}
+                            <input name="modal" type="hidden" value="0">
+                            {{ form_end(delete_form) }}
 
-                        <div id="delete_confirm" class="modal fade">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h3>{{ 'Confirm delete'|trans({}, 'Estimation') }}</h3>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>{{ 'You are about to delete an item'|trans({}, 'Estimation') }}, {{ 'this procedure is irreversible'|trans({}, 'Estimation') }}.</p>
-                                        <p>{{ 'Do you want to proceed?'|trans({}, 'Estimation') }}</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-danger">{{ 'Yes'|trans({}, 'Estimation') }}</button>
-                                        <button class="btn btn-default" data-dismiss="modal">{{ 'No'|trans({}, 'Estimation') }}</button>
+                            <div id="delete_confirm" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;</button>
+                                            <h3>{{ 'Confirm delete'|trans({}, 'Estimation') }}</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ 'You are about to delete an item'|trans({}, 'Estimation') }}
+                                                , {{ 'this procedure is irreversible'|trans({}, 'Estimation') }}.</p>
+                                            <p>{{ 'Do you want to proceed?'|trans({}, 'Estimation') }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-danger">{{ 'Yes'|trans({}, 'Estimation') }}</button>
+                                            <button class="btn btn-default"
+                                                    data-dismiss="modal">{{ 'No'|trans({}, 'Estimation') }}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="box-body">
-                    <table class="table table-hover record_properties">
-                        <tbody>
+                    <div class="box-body">
+                        <table class="table table-hover record_properties">
+                            <tbody>
                             <tr>
-                                <th scope="row">{{'Name'|trans({}, 'Estimation')}}</th>
+                                <th scope="row">{{ 'Name'|trans({}, 'Estimation') }}</th>
                                 <td>{{ estimation.name }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">{{'Ratioadmin'|trans({}, 'Estimation')}}</th>
+                                <th scope="row">{{ 'Ratioadmin'|trans({}, 'Estimation') }}</th>
                                 <td>{{ estimation.ratioAdmin }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">{{'Ratiotesting'|trans({}, 'Estimation')}}</th>
+                                <th scope="row">{{ 'Ratiotesting'|trans({}, 'Estimation') }}</th>
                                 <td>{{ estimation.ratioTesting }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">{{'Dailyworkinghours'|trans({}, 'Estimation')}}</th>
+                                <th scope="row">{{ 'Dailyworkinghours'|trans({}, 'Estimation') }}</th>
                                 <td>{{ estimation.dailyWorkingHours }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">{{'Opportunity'|trans}}</th>
+                                <th scope="row">{{ 'Opportunity'|trans }}</th>
                                 <td>{{ estimation.opportunity }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">{{'Account'|trans}}</th>
+                                <th scope="row">{{ 'Account'|trans }}</th>
                                 <td>{{ estimation.account }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">{{'Project'|trans}}</th>
+                                <th scope="row">{{ 'Project'|trans }}</th>
                                 <td>{{ estimation.project }}</td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="box-footer">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
 
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-8">
-            <div class="box">
-                <div class="box-header">
-                    <div class="box-tools">
-                        <a class="btn btn-link" href="{{ path('estimationitem_new_toestimation', { 'id':estimation.id }) }}">
-                            Add
-                        </a>
                     </div>
                 </div>
-                <div class="box-body">
-                    <table class="table table-condensed">
-                        <thead>
+            </div>
+            <div class="col-lg-8">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="box-tools">
+                            <a class="btn btn-link"
+                               href="{{ path('estimationitem_new_toestimation', { 'id':estimation.id }) }}">
+                                Add
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-condensed">
+                            <thead>
                             <tr>
                                 <th>name</th>
                                 <th>description</th>
@@ -107,31 +120,31 @@
                                 <th>pesimistic</th>
                                 <th>average</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                        {% for item in data.items %}
-                            <tr>
-                                <td>
-                                    <a href="{{ path('estimationitem_edit', { 'id':item.id }) }}">
-                                        {{ item.name }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ item.description }}
-                                </td>
-                                <td>
-                                    {{ item.optimistic }}
-                                </td>
-                                <td>
-                                    {{ item.pesimistic }}
-                                </td>
-                                <td>
-                                    {{ item.average }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                        </tfoot>
+                            </thead>
+                            <tbody>
+                            {% for item in data.items %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('estimationitem_edit', { 'id':item.id }) }}">
+                                            {{ item.name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ item.description }}
+                                    </td>
+                                    <td>
+                                        {{ item.optimistic }}
+                                    </td>
+                                    <td>
+                                        {{ item.pesimistic }}
+                                    </td>
+                                    <td>
+                                        {{ item.average }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            </tfoot>
                             <tr>
                                 <td>
                                     Total
@@ -148,24 +161,24 @@
                                     {{ data.totalHours.average }}
                                 </td>
                             </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="box">
-                <div class="box-header">
-                </div>
-                <div class="box-body">
-                    <table class="table table-condensed">
-                        <thead>
+                <div class="box">
+                    <div class="box-header">
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-condensed">
+                            <thead>
                             <tr>
                                 <th>type</th>
                                 <th>optimistic</th>
                                 <th>pesimistic</th>
                                 <th>average</th>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             <tr>
                                 <td>admin</td>
                                 <td>{{ data.adminHours.optimistic }}</td>
@@ -178,20 +191,20 @@
                                 <td>{{ data.testingHours.pesimistic }}</td>
                                 <td>{{ data.testingHours.average }}</td>
                             </tr>
-                        </tbody>
-                        <tfoot>
+                            </tbody>
+                            <tfoot>
                             <tr>
                                 <td>
                                     Total hours
                                 </td>
                                 <td>
-                                    {{ data.totalWorkHours.optimistic  }}
+                                    {{ data.totalWorkHours.optimistic }}
                                 </td>
                                 <td>
-                                    {{ data.totalWorkHours.pesimistic  }}
+                                    {{ data.totalWorkHours.pesimistic }}
                                 </td>
                                 <td>
-                                    {{ data.totalWorkHours.average  }}
+                                    {{ data.totalWorkHours.average }}
                                 </td>
                             </tr>
                             <tr>
@@ -199,22 +212,22 @@
                                     Total days
                                 </td>
                                 <td>
-                                    {{ data.totalDays.optimistic  }}
+                                    {{ data.totalDays.optimistic }}
                                 </td>
                                 <td>
-                                    {{ data.totalDays.pesimistic  }}
+                                    {{ data.totalDays.pesimistic }}
                                 </td>
                                 <td>
-                                    {{ data.totalDays.average  }}
+                                    {{ data.totalDays.average }}
                                 </td>
                             </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-</section>
+        </div>
+    </section>
 
 {% endblock %}
