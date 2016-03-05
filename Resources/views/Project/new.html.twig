@@ -13,23 +13,22 @@
     <section class="content">
         <div class="box">
             <div class="box-header">
-                <h3 class="box-title">{{ '%entity% creation'|trans({'%entity%': 'Project'}, 'Project') }}</h3>
+                <h3 class="box-title"></h3>
             </div>
             <div class="box-body">
                 {{ form_start(form, {action: path('project_create')}) }}
-                    {{ form_widget(form) }}
-                    <p>
-                        <button class="btn btn-default" type="submit">{{ 'Create'|trans({}, 'Project') }}</button>
-                    </p>
+                {{ form_widget(form) }}
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-primary" type="submit">{{ 'Create'|trans({}, 'Project') }}</button>
+
+                    </div>
+                </div>
                 {{ form_end(form) }}
             </div>
             <div class="box-footer">
-
-        <div class="btn-group record_actions">
-
-
-        </div>
-
+                <div class="btn-group record_actions">
+                </div>
             </div>
         </div>
     </section>
