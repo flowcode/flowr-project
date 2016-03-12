@@ -8,6 +8,7 @@ use Flower\CoreBundle\Form\Type\TaskProjectType;
 use Flower\CoreBundle\Form\Type\TaskType;
 use Flower\ModelBundle\Entity\Board\History;
 use Flower\ModelBundle\Entity\Project\Project;
+use Flower\ModelBundle\Entity\Project\ProjectIteration;
 use Flower\ModelBundle\Entity\Project\ProjectMembership;
 use Flower\ModelBundle\Entity\User\User;
 use Flower\ModelBundle\Entity\Board\TaskStatus;
@@ -118,9 +119,9 @@ class ProjectController extends Controller
     {
         $deleteForm = $this->createDeleteForm($project->getId(), 'project_delete');
         $em = $this->getDoctrine()->getManager();
-        $overallSpent = $em->getRepository("FlowerModelBundle:Project\Project")->getOverallBy($project);
-        $monthSpent = $em->getRepository("FlowerModelBundle:Project\Project")->getMonthBy($project);
-        $weekSpent = $em->getRepository("FlowerModelBundle:Project\Project")->getWeekBy($project);
+        $overallSpent = $em->getRepository('FlowerModelBundle:Project\Project')->getOverallBy($project);
+        $monthSpent = $em->getRepository('FlowerModelBundle:Project\Project')->getMonthBy($project);
+        $weekSpent = $em->getRepository('FlowerModelBundle:Project\Project')->getWeekBy($project);
         if (!is_null($project->getEstimated())) {
             $spentPercentage = ($overallSpent * 100) / $project->getEstimated();
         } else {
@@ -135,17 +136,18 @@ class ProjectController extends Controller
         /* next events */
         $nextEvents = $em->getRepository('FlowerModelBundle:Planner\Event')->findBy(array("project" => $project), array("startDate" => "ASC"), 5);
 
-        $projectService = $this->get("flower.project");
-        $projectBoards = $projectService->getBoardsWithStadistics($project);
+        /* iterations */
+        $iterations = $em->getRepository('FlowerModelBundle:Project\ProjectIteration')->findWithStats($project->getId());
+
         return array(
             'edit_form' => $editForm->createView(),
             'project' => $project,
             'overallSpent' => $overallSpent,
             'monthSpent' => $monthSpent,
             'weekSpent' => $weekSpent,
-            'projectBoards' => $projectBoards,
             'overallSpentRatio' => $spentPercentage,
             'nextEvents' => $nextEvents,
+            'iterations' => $iterations,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -329,15 +331,18 @@ class ProjectController extends Controller
     /**
      * Displays a form to create a new Board entity.
      *
-     * @Route("/board/{id}/new", name="board_new_to_project")
+     * @Route("/iteration/{id}/board/new", name="board_new_to_project_iteration")
      * @Method("GET")
      * @Template("FlowerBoardBundle:Board:new.html.twig")
      */
-    public function newToProjectAction(Project $project)
+    public function newToProjectIterationAction(ProjectIteration $projectIteration)
     {
         $board = new Board();
+        $filter = "project_iteration_id=" . $projectIteration->getId();
+        $board->setFilter($filter);
+
         $form = $this->createForm($this->get("form.type.board"), $board, array(
-            'action' => $this->generateUrl('board_new_to_project_create', array("id" => $project->getId())),
+            'action' => $this->generateUrl('board_new_to_project_iteration_create', array("id" => $projectIteration->getId())),
             'method' => 'POST',
         ));
         return array(
@@ -349,13 +354,144 @@ class ProjectController extends Controller
     /**
      * Creates a new Board entity.
      *
-     * @Route("/{id}/create", name="board_new_to_project_create")
+     * @Route("/iteration/{id}/board/create", name="board_new_to_project_iteration_create")
+     * @Method("POST")
+     * @Template("FlowerBoardBundle:Board:new.html.twig")
+     */
+    public function createIterationBoardAction(Request $request, ProjectIteration $projectIteration)
+    {
+        $board = new Board();
+        $filter = "project_iteration_id=" . $projectIteration->getId();
+        $board->setFilter($filter);
+        $board->setProjectIteration($projectIteration);
+
+        $form = $this->createForm($this->get("form.type.board"), $board);
+        if ($form->handleRequest($request)->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($board);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('board_show', array('id' => $board->getId())));
+        }
+
+        return array(
+            'board' => $board,
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * Displays a form to create a new Board entity.
+     *
+     * @Route("/{id}/board/new", name="board_new_to_project")
+     * @Method("GET")
+     * @Template("FlowerBoardBundle:Board:new.html.twig")
+     */
+    public function newToProjectAction(Project $project)
+    {
+        $board = new Board();
+        $board->setFilter("project_id=" . $project->getId());
+
+        $form = $this->createForm($this->get("form.type.board"), $board, array(
+            'action' => $this->generateUrl('board_new_to_project_create', array("id" => $project->getId())),
+            'method' => 'POST',
+        ));
+        return array(
+            'board' => $board,
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * new iteration.
+     *
+     * @Route("/{id}/iteration/new", name="project_iteration_new")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newIterationAction(Project $project)
+    {
+        $iteration = new ProjectIteration();
+        $iteration->setProject($project);
+
+        $form = $this->createForm($this->get("form.type.project_iteration"), $iteration, array(
+            'action' => $this->generateUrl('project_iteration_create', array("id" => $project->getId())),
+            'method' => 'POST',
+        ));
+
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * new iteration.
+     *
+     * @Route("/iteration/{id}", name="project_iteration_show")
+     * @Method("GET")
+     * @Template()
+     */
+    public function showIterationAction(ProjectIteration $iteration)
+    {
+
+        return array(
+            'iteration' => $iteration,
+        );
+    }
+
+    /**
+     * Creates a new Board entity.
+     *
+     * @Route("/{id}/iteration/create", name="project_iteration_create")
+     * @Method("POST")
+     * @Template("FlowerBoardBundle:Board:new.html.twig")
+     */
+    public function createIterationAction(Project $project, Request $request)
+    {
+        $iteration = new ProjectIteration();
+        $iteration->setProject($project);
+
+        $form = $this->createForm($this->get("form.type.project_iteration"), $iteration);
+        if ($form->handleRequest($request)->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($iteration);
+            $em->flush();
+
+            $defaultBoard = new Board();
+            $defaultBoard->setName("default");
+            $defaultBoard->setProjectIteration($iteration);
+
+            /* default filter */
+            $filer = "project_id=" . $iteration->getProject()->getId();
+            $filer .= "|project_iteration_id=" . $iteration->getId();
+
+            $defaultBoard->setFilter($filer);
+            $em->persist($defaultBoard);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('project_show', array('id' => $project->getId())));
+        }
+
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+
+
+    /**
+     * Creates a new Board entity.
+     *
+     * @Route("/{id}/board/create", name="board_new_to_project_create")
      * @Method("POST")
      * @Template("FlowerBoardBundle:Board:new.html.twig")
      */
     public function createBoardAction(Project $project, Request $request)
     {
         $board = new Board();
+        $board->setFilter("project_id=" . $project->getId());
+
         $form = $this->createForm($this->get("form.type.board"), $board);
         if ($form->handleRequest($request)->isValid()) {
             $project->addBoard($board);
@@ -441,4 +577,25 @@ class ProjectController extends Controller
             'form' => $form->createView(),
         );
     }
+
+
+    /**
+     * Lists all Board entities.
+     *
+     * @Route("/{project_id}/board/{board_id}/kanban", name="project_board_task_kanban")
+     * @Method("GET")
+     * @Template()
+     */
+    public function tasksKanbanAction($project_id, $board_id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $project = $em->getRepository('FlowerModelBundle:Project\Project')->find($project_id);
+        $board = $em->getRepository('FlowerModelBundle:Board\Board')->find($board_id);
+
+        return array(
+            'project' => $project,
+            'board' => $board,
+        );
+    }
+
 }

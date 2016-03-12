@@ -1,0 +1,85 @@
+{% extends "FlowerCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ '%entity% edit'|trans({'%entity%': 'Project'}, 'Project') }} - {{ parent() }}{% endblock %}
+
+{% block app_menu %}
+    {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_project_list': true }) }}
+{% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <h1>{{ iteration.project|title }}</h1>
+    </section>
+    <section class="content">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">
+                    {{ iteration|title }}
+                </h3>
+                <div>
+                    <small>
+                        <a href="{{ path('project_show', { 'id': iteration.project.id }) }}">
+                            {{ iteration.project|title }}
+                        </a>
+                    </small>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>{{ 'tasks'|trans|title }}</h4>
+                        <table class="table table-condensed">
+                            <thead>
+                            <tr>
+                                <th>{{ 'name' }}</th>
+                                <th>{{ 'status' }}</th>
+                                <th>{{ 'estimated' }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for task in iteration.tasks %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('task_show', {'id':task.id}) }}">
+                                            {{ task.name|title }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span>{{ task.status }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ task.estimated }}</span>
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>
+                            {{ 'views'|trans|title }}
+
+                            <a href="{{ path('board_new_to_project_iteration', {'id': iteration.id }) }}"
+                               class="btn btn-linl btn-xs pull-right">
+                                <i class="fa fa-plus"></i> Add
+                            </a>
+                        </h4>
+
+                        <ul class="list-unstyled">
+                            {% for board in iteration.boards %}
+                                <li>
+                                    <a href="{{ path('project_board_task_kanban', {'project_id': iteration.project.id, 'board_id':board.id}) }}">
+                                        {{ board.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer">
+            </div>
+        </div>
+    </section>
+{% endblock %}
