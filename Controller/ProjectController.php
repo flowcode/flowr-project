@@ -582,19 +582,55 @@ class ProjectController extends Controller
     /**
      * Lists all Board entities.
      *
-     * @Route("/{project_id}/board/{board_id}/kanban", name="project_board_task_kanban")
+     * @Route("/{project_id}/filter/{task_filter_id}/kanban", name="project_board_task_kanban")
      * @Method("GET")
      * @Template()
      */
-    public function tasksKanbanAction($project_id, $board_id)
+    public function tasksKanbanAction($project_id, $task_filter_id)
     {
         $em = $this->getDoctrine()->getManager();
         $project = $em->getRepository('FlowerModelBundle:Project\Project')->find($project_id);
-        $board = $em->getRepository('FlowerModelBundle:Board\Board')->find($board_id);
+        $taskFilter = $em->getRepository('FlowerModelBundle:Board\TaskFilter')->find($task_filter_id);
 
         return array(
             'project' => $project,
-            'board' => $board,
+            'filter' => $taskFilter,
+        );
+    }
+
+    /**
+     * Lists all Board entities.
+     *
+     * @Route("/{project_id}/filter/{task_filter_id}/list", name="project_board_task_list")
+     * @Method("GET")
+     * @Template()
+     */
+    public function tasksListAction(Request $request, $project_id, $task_filter_id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->getRepository('FlowerModelBundle:Board\Task')->createQueryBuilder('t');
+        $qb->join("t.status", "s");
+
+        $taskFilter = $em->getRepository('FlowerModelBundle:Board\TaskFilter')->find($task_filter_id);
+        $filter = $this->get("board.service.task")->getTaskFilter($taskFilter->getFilter());
+        $qb = $taskRepo = $em->getRepository('FlowerModelBundle:Board\Task')->findByStatusQB(null, $filter);
+
+        $paginator = $this->get('knp_paginator')->paginate($qb, $request->get('page', 1), 20);
+
+        $statuses = $em->getRepository('FlowerModelBundle:Board\TaskStatus')->findAll();
+        $users = $em->getRepository('FlowerModelBundle:User\User')->findAll();
+
+        $project = $em->getRepository('FlowerModelBundle:Project\Project')->find($project_id);
+
+        return array(
+            'project' => $project,
+            'assigneeFilter' => null,
+            'statusFilter' => null,
+            'users' => $users,
+            'statuses' => $statuses,
+            'filter' => $taskFilter,
+            'paginator' => $paginator,
         );
     }
 

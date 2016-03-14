@@ -68,15 +68,15 @@ class ProjectIteration
     protected $tasks;
 
     /**
-     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Board\Board", mappedBy="projectIteration")
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Board\TaskFilter", mappedBy="projectIteration")
      */
-    protected $boards;
+    protected $taskFilters;
 
 
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
-        $this->boards = new ArrayCollection();
+        $this->taskFilters = new ArrayCollection();
     }
 
     /**
@@ -216,17 +216,17 @@ class ProjectIteration
     /**
      * @return mixed
      */
-    public function getBoards()
+    public function getTaskFilters()
     {
-        return $this->boards;
+        return $this->taskFilters;
     }
 
     /**
-     * @param mixed $boards
+     * @param mixed $taskFilters
      */
-    public function setBoards($boards)
+    public function setTaskFilters($taskFilters)
     {
-        $this->boards = $boards;
+        $this->taskFilters = $taskFilters;
     }
 
 

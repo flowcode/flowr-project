@@ -67,10 +67,10 @@
                         </h4>
 
                         <ul class="list-unstyled">
-                            {% for board in iteration.boards %}
+                            {% for filter in iteration.taskFilters %}
                                 <li>
-                                    <a href="{{ path('project_board_task_kanban', {'project_id': iteration.project.id, 'board_id':board.id}) }}">
-                                        {{ board.name }}
+                                    <a href="{{ path('project_board_task_kanban', {'project_id': iteration.project.id, 'task_filter_id':filter.id}) }}">
+                                        {{ filter.name }}
                                     </a>
                                 </li>
                             {% endfor %}
