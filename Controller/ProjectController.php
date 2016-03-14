@@ -7,6 +7,7 @@ use Flower\CoreBundle\Form\Type\ProjectType;
 use Flower\CoreBundle\Form\Type\TaskProjectType;
 use Flower\CoreBundle\Form\Type\TaskType;
 use Flower\ModelBundle\Entity\Board\History;
+use Flower\ModelBundle\Entity\Board\TaskFilter;
 use Flower\ModelBundle\Entity\Project\Project;
 use Flower\ModelBundle\Entity\Project\ProjectIteration;
 use Flower\ModelBundle\Entity\Project\ProjectMembership;
@@ -459,7 +460,7 @@ class ProjectController extends Controller
             $em->persist($iteration);
             $em->flush();
 
-            $defaultBoard = new Board();
+            $defaultBoard = new TaskFilter();
             $defaultBoard->setName("default");
             $defaultBoard->setProjectIteration($iteration);
 
