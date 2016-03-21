@@ -1,0 +1,41 @@
+{% extends "FlowerCoreBundle::layout.html.twig" %}
+
+{% block title %}{{ '%entity% creation'|trans({'%entity%': 'Project'}, 'Project') }} - {{ parent() }}{% endblock %}
+
+{% block app_menu %}
+    {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_project_list': true }) }}
+{% endblock %}
+
+{% block body %}
+    <section class="content-header">
+        <h1>{{ 'iteration.edit'|trans({},'Project')|title }}</h1>
+    </section>
+    <section class="content">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"></h3>
+            </div>
+            <div class="box-body">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-primary" type="submit">
+                            {{ 'Update'|trans({}, 'Project') }}
+                        </button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="box-footer">
+                <div class="btn-group record_actions">
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

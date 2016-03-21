@@ -165,7 +165,7 @@
                                     <div class="box-tools">
                                         <a class="btn btn-link"
                                            href="{{ path('project_iteration_new', { "id": project.id }) }}">
-                                            <i class="fa fa-plus"></i>
+                                            <i class="ionicons ion-ios-plus-empty"></i> {{ 'add'|trans }}
                                         </a>
                                     </div>
                                 </div>
@@ -177,12 +177,24 @@
                                             <th>{{ 'spent'|trans|title }}</th>
                                             <th>{{ 'start'|trans|title }}</th>
                                             <th>{{ 'end'|trans|title }}</th>
-                                            <th>{{ 'status'|trans|title }}</th>
+                                            <th></th>
                                         </tr>
                                         {% for iteration in iterations %}
                                             <tr>
                                                 <td>
-                                                    <a class="" href="{{ path('project_iteration_show', {'id':iteration.id}) }}">
+                                                    {% set iteration_status_class = '' %}
+                                                    {% set iteration_status_msg = 'done' %}
+                                                    {% if iteration.status == 0 %}
+                                                        {% set iteration_status_class = 'text-muted' %}
+                                                        {% set iteration_status_msg = 'pending' %}
+                                                    {% elseif iteration.status == 1 %}
+                                                        {% set iteration_status_class = 'text-green' %}
+                                                        {% set iteration_status_msg = 'active' %}
+                                                    {% endif %}
+                                                    <a
+                                                            title="{{ iteration_status_msg }}"
+                                                            class="{{ iteration_status_class }}"
+                                                            href="{{ path('project_iteration_show', {'id':iteration.id}) }}">
                                                         {{ iteration.name|title }}
                                                     </a>
                                                 </td>
@@ -199,7 +211,12 @@
                                                     {{ iteration.dueDate|date('y/m/d') }}
                                                 </td>
                                                 <td>
-                                                    {{ iteration.status }}
+                                                    {% if iteration.status == 1 %}
+                                                        <a href="{{ path('project_iteration_default_view', {'id':iteration.id}) }}"
+                                                           class="btn btn-link btn-xs">
+                                                            {{ "tasks"|trans }}
+                                                        </a>
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                         {% endfor %}

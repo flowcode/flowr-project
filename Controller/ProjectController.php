@@ -427,6 +427,26 @@ class ProjectController extends Controller
     }
 
     /**
+     * Edit iteration.
+     *
+     * @Route("/iteration/{id}/edit", name="project_iteration_edit")
+     * @Method("GET")
+     * @Template("FlowerProjectBundle:Project:editIteration.html.twig")
+     */
+    public function iterationEditAction(ProjectIteration $projectIteration)
+    {
+
+        $form = $this->createForm($this->get("form.type.project_iteration"), $projectIteration, array(
+            'action' => $this->generateUrl('project_iteration_update', array("id" => $projectIteration->getId())),
+            'method' => 'POST',
+        ));
+
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
      * new iteration.
      *
      * @Route("/iteration/{id}", name="project_iteration_show")
@@ -435,8 +455,44 @@ class ProjectController extends Controller
      */
     public function showIterationAction(ProjectIteration $iteration)
     {
+        $em = $this->getDoctrine()->getManager();
+        $burndown = array();
+
+        $iterationPeriod = new \DatePeriod(
+            $iteration->getStartDate(),
+            new \DateInterval('P1D'),
+            $iteration->getDueDate()->modify('+1 day')
+        );
+
+        $totalEstimated = 0;
+        foreach ($iteration->getTasks() as $task) {
+            $totalEstimated += $task->getEstimated();
+        }
+
+        $dataArr = array();
+        $burndownPeriod = array();
+        foreach ($iterationPeriod as $iterationDate) {
+            $insumed = $em->getRepository('FlowerModelBundle:Board\Task')->getEstimatedOn($iteration->getId(), $iterationDate);
+            $insumed = is_null($insumed) ? 0 : $insumed;
+
+            $dataArr[] = $totalEstimated - $insumed;
+            $burndownPeriod[] = $iterationDate->format('d/m/Y');
+        }
+        $burndown = array(
+            "labe" => "Work",
+            "fillColor" => "rgba(60,141,188,0.9)",
+            "strokeColor" => "rgba(60,141,188,0.8)",
+            "pointColor" => "#3b8bba",
+            "pointStrokeColor" => "rgba(60,141,188,1)",
+            "pointHighlightFill" => "#fff",
+            "pointHighlightStroke" => "rgba(60,141,188,1)",
+            "data" => $dataArr,
+        );
 
         return array(
+            'totalEstimated' => $totalEstimated,
+            'burndownPeriod' => $burndownPeriod,
+            'burndown' => $burndown,
             'iteration' => $iteration,
         );
     }
@@ -473,6 +529,30 @@ class ProjectController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('project_show', array('id' => $project->getId())));
+        }
+
+        return array(
+            'form' => $form->createView(),
+        );
+    }
+
+    /**
+     * Creates a new Board entity.
+     *
+     * @Route("/{id}/iteration/update", name="project_iteration_update")
+     * @Method("POST")
+     * @Template("FlowerProjectBundle:Project:editIteration.html.twig")
+     */
+    public function iterationUpdateAction(Request $request, ProjectIteration $projectIteration)
+    {
+
+        $form = $this->createForm($this->get("form.type.project_iteration"), $projectIteration);
+        if ($form->handleRequest($request)->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('project_iteration_show', array('id' => $projectIteration->getId())));
         }
 
         return array(
@@ -579,6 +659,30 @@ class ProjectController extends Controller
         );
     }
 
+    /**
+     * Lists all Board entities.
+     *
+     * @Route("/iteration/{id}/default_iew", name="project_iteration_default_view")
+     * @Method("GET")
+     * @Template()
+     */
+    public function defaultViewAction(ProjectIteration $projectIteration)
+    {
+
+        $project = $projectIteration->getProject();
+
+        $em = $this->getDoctrine()->getManager();
+        $filters = $em->getRepository('FlowerModelBundle:Board\TaskFilter')->findBy(array("projectIteration" => $projectIteration->getId()));
+        $taskFilterId = null;
+        if ($filters[0]) {
+            $taskFilterId = $filters[0]->getId();
+        }
+
+        return $this->redirect($this->generateUrl('project_board_task_kanban', array(
+            'project_id' => $project->getId(),
+            'task_filter_id' => $taskFilterId,
+        )));
+    }
 
     /**
      * Lists all Board entities.
@@ -593,7 +697,14 @@ class ProjectController extends Controller
         $project = $em->getRepository('FlowerModelBundle:Project\Project')->find($project_id);
         $taskFilter = $em->getRepository('FlowerModelBundle:Board\TaskFilter')->find($task_filter_id);
 
+        $filters = array();
+        if ($taskFilter->getProjectIteration()) {
+            $projectIteration = $taskFilter->getProjectIteration();
+            $filters = $em->getRepository('FlowerModelBundle:Board\TaskFilter')->findBy(array("projectIteration" => $projectIteration->getId()));
+        }
+
         return array(
+            'filters' => $filters,
             'project' => $project,
             'filter' => $taskFilter,
         );

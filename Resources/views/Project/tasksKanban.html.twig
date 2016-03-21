@@ -22,6 +22,23 @@
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title">{{ filter.name|capitalize }}</h3>
+                <div class="box-tools">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Cambiar vista <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for avail_filter in filters %}
+                                <li>
+                                    <a href="{{ path('project_board_task_kanban', {'project_id': project.id, 'task_filter_id':avail_filter.id}) }}">
+                                        {{ avail_filter }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="box-body">
                 <div class="row" ng-view>
@@ -48,7 +65,9 @@
     <script src="{{ asset('bundles/flowercore/js/angular/sortable.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/flowercore/js/angular/ngStorage.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/flowercore/js/angular/kanban/app-kanban.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/flowercore/js/angular/kanban/controller/taskListCtrl.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('bundles/flowercore/js/angular/kanban/controller/taskKanbanCtrl.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/flowercore/js/angular/kanban/controller/taskListCtrl.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('bundles/flowercore/js/angular/kanban/controller/taskKanbanCtrl.js') }}"
+            type="text/javascript"></script>
 
 {% endblock %}

@@ -22,7 +22,6 @@ class ProjectIterationType extends AbstractType
                     1 => "active",
                     2 => "done",
                 ),
-                'data' => 0
             ))
             ->add('startDate', 'collot_datetime', array('required' => false,
                 'pickerOptions' =>
