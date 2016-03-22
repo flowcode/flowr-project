@@ -458,28 +458,35 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getManager();
         $burndown = array();
 
-        $iterationPeriod = new \DatePeriod(
-            $iteration->getStartDate(),
-            new \DateInterval('P1D'),
-            $iteration->getDueDate()->modify('+1 day')
-        );
-
         $totalEstimated = 0;
         foreach ($iteration->getTasks() as $task) {
             $totalEstimated += $task->getEstimated();
         }
 
+
         $dataArr = array();
         $burndownPeriod = array();
-        foreach ($iterationPeriod as $iterationDate) {
-            $insumed = $em->getRepository('FlowerModelBundle:Board\Task')->getEstimatedOn($iteration->getId(), $iterationDate);
-            $insumed = is_null($insumed) ? 0 : $insumed;
 
-            $dataArr[] = $totalEstimated - $insumed;
-            $burndownPeriod[] = $iterationDate->format('d/m/Y');
+        if(!is_null($iteration->getStartDate()) && !is_null($iteration->getDueDate())){
+
+            $iterationPeriod = new \DatePeriod(
+                $iteration->getStartDate(),
+                new \DateInterval('P1D'),
+                $iteration->getDueDate()->modify('+1 day')
+            );
+
+            foreach ($iterationPeriod as $iterationDate) {
+                $insumed = $em->getRepository('FlowerModelBundle:Board\Task')->getEstimatedOn($iteration->getId(), $iterationDate);
+                $insumed = is_null($insumed) ? 0 : $insumed;
+
+                $dataArr[] = $totalEstimated - $insumed;
+                $burndownPeriod[] = $iterationDate->format('d/m/Y');
+            }
+
         }
+
         $burndown = array(
-            "labe" => "Work",
+            "label" => "Work",
             "fillColor" => "rgba(60,141,188,0.9)",
             "strokeColor" => "rgba(60,141,188,0.8)",
             "pointColor" => "#3b8bba",

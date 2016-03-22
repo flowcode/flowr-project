@@ -175,6 +175,7 @@
                                             <th>{{ 'name'|trans|title }}</th>
                                             <th>{{ 'estimated'|trans|title }}</th>
                                             <th>{{ 'spent'|trans|title }}</th>
+                                            <th>{{ '% Done'|trans|title }}</th>
                                             <th>{{ 'start'|trans|title }}</th>
                                             <th>{{ 'end'|trans|title }}</th>
                                             <th></th>
@@ -205,10 +206,17 @@
                                                     {{ iteration.spent }}
                                                 </td>
                                                 <td>
-                                                    {{ iteration.startDate|date('y/m/d') }}
+                                                    {{ ((iteration.done_count*100)/(iteration.todo_count+iteration.doing_count+iteration.done_count))|number_format }}
                                                 </td>
                                                 <td>
-                                                    {{ iteration.dueDate|date('y/m/d') }}
+                                                    {% if iteration.dueDate %}
+                                                        {{ iteration.startDate|date('y/m/d') }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if iteration.dueDate %}
+                                                        {{ iteration.dueDate|date('y/m/d') }}
+                                                    {% endif %}
                                                 </td>
                                                 <td>
                                                     {% if iteration.status == 1 %}
