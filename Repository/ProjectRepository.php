@@ -145,8 +145,8 @@ class ProjectRepository extends EntityRepository
         $qb = $this->createQueryBuilder("p");
         $qb->select("p.id as projectId, b.id as board_id,b.name as board_name, SUM(tl.hours) as time, count(t) as countTasks");
         $qb->join("p.boards", "b");
-        $qb->join("b.tasks", "t");
-        $qb->join("t.status", "ts");
+        $qb->leftJoin("b.tasks", "t");
+        $qb->leftJoin("t.status", "ts");
         $qb->leftJoin(
             'FlowerModelBundle:Board\TimeLog',
             'tl',
