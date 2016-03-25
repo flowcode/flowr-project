@@ -94,6 +94,12 @@ class Project
     protected $docPages;
 
     /**
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Project\ProjectIteration", mappedBy="project")
+     * @Groups({"public_api"})
+     * */
+    protected $iterations;
+
+    /**
      * @ManyToOne(targetEntity="\Flower\ModelBundle\Entity\User\User")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      * */
@@ -105,14 +111,15 @@ class Project
      * */
     protected $members;
 
-        /**
-     * @ManyToMany(targetEntity="\Flower\ModelBundle\Entity\Board\Board")
-     * @JoinTable(name="project_boards",
-     *      joinColumns={@JoinColumn(name="project_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="board_id", referencedColumnName="id", unique=true)}
-     *      )
-     **/
-    protected $boards;
+    /**
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Planner\Event", mappedBy="project")
+     */
+    protected $events;
+
+    /**
+     * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Board\Task", mappedBy="project")
+     */
+    protected $tasks;
 
     /**
      * @var DateTime
@@ -151,7 +158,10 @@ class Project
         $this->enabled = true;
         $this->docPages = new ArrayCollection();
         $this->members = new ArrayCollection();
+        $this->iterations = new ArrayCollection();
         $this->boards = new ArrayCollection();
+        $this->events = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     /**
@@ -409,6 +419,7 @@ class Project
     {
         return $this->docPages;
     }
+
     /**
      * Set type
      *
@@ -425,7 +436,7 @@ class Project
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -544,5 +555,38 @@ class Project
     {
         return $this->dailyWorkingHours;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param mixed $events
+     */
+    public function setEvents($events)
+    {
+        $this->events = $events;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIterations()
+    {
+        return $this->iterations;
+    }
+
+    /**
+     * @param mixed $iterations
+     */
+    public function setIterations($iterations)
+    {
+        $this->iterations = $iterations;
+    }
+
 
 }

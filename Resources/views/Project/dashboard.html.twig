@@ -2,9 +2,15 @@
 
 {% block title %}{{ 'projects'|trans|capitalize }} - {{ parent() }}{% endblock %}
 
+{% block app_menu %}
+    {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_project_overview': true }) }}
+{% endblock %}
+
 {% block body %}
+    <section class="content-header">
+        <h1>{{ 'kanban'|trans|title }}</h1>
+    </section>
     <section class="content">
-        {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_project_overview': true }) }} 
         <div class="box">
             <div class="box-header">
                 <div class="box-tools pull-right">
@@ -23,12 +29,13 @@
                                     <li class="card">
                                         <div class="box box-solid bg-postit {% if project.type == 'ongoing' %}bg-aqua{% endif %}">
                                             <div class="box-header">
-                                                <a class="box-title" href="{{ path('project_show', {id: project.id}) }}">{{ project.name|capitalize }}</a>
+                                                <a class="box-title"
+                                                   href="{{ path('project_show', {id: project.id}) }}">{{ project.name|capitalize }}</a>
                                             </div>
                                             <div class="box-body">
 
 
-                                                <span class="label label-default">{{project.account}}</span>
+                                                <span class="label label-default">{{ project.account }}</span>
                                             </div>
                                         </div>
                                     </li>
@@ -52,12 +59,12 @@
     <script type="text/javascript">
         $(function () {
             //Esto va a futuro
-        /*    $(".sortable").sortable({
-                revert: true
-            });
-            $(".card").draggable({
-                connectToSortable: ".sortable"
-            });*/
+            /*    $(".sortable").sortable({
+             revert: true
+             });
+             $(".card").draggable({
+             connectToSortable: ".sortable"
+             });*/
         });
     </script>
 {% endblock %}

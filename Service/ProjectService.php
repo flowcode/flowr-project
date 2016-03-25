@@ -61,8 +61,8 @@ class ProjectService implements ContainerAwareInterface
 
         $qb->join($alias . ".members", "m", "with", "1=1");
         $qb->andWhere("( p.assignee IN (:users) OR m.user IN (:members))")
-            ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user))
-            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user));
+            ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user, true))
+            ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user, true));
 
         return $qb->getQuery()->getResult();
     }

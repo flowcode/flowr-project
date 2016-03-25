@@ -1,14 +1,23 @@
 services:
+
     form.type.project:
         class: Flower\ProjectBundle\Form\Type\ProjectType
         arguments: ["@security.context"]
         tags:
-            - { name: form.type, alias: project_type }    
+            - { name: form.type, alias: project_type }
+
+    form.type.project_iteration:
+            class: Flower\ProjectBundle\Form\Type\ProjectIterationType
+            arguments: ["@security.context"]
+            tags:
+                - { name: form.type, alias: project_iteration_type }
+
     form.type.docproject:
         class: Flower\ProjectBundle\Form\Type\DocPageType
         arguments: ["@security.context"]
         tags:
             - { name: form.type, alias: project_type }    
+
     flower.project:
         class: Flower\ProjectBundle\Service\ProjectService
         arguments: ['@security.context']

@@ -2,26 +2,32 @@
 
 {% block title %}{{ '%entity% creation'|trans({'%entity%': 'Estimation'}, 'Estimation') }} - {{ parent() }}{% endblock %}
 
+{% block app_menu %}
+    {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_estimation': true }) }}
+{% endblock %}
+
 {% block body %}
+    <section class="content-header">
+        <h1>{{ 'estimations'|trans|title }}</h1>
+    </section>
     <section class="content">
-        {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_estimation': true }) }} 
         <div class="box">
             <div class="box-header">
             </div>
             <div class="box-body">
                 {{ form_start(form, {action: path('estimation_create')}) }}
-                    {{ form_widget(form) }}
-                    <p>
-                        <button class="btn btn-primary" type="submit">{{ 'Create'|trans({}, 'Estimation') }}</button>
-                    </p>
+                {{ form_widget(form) }}
+                <p>
+                    <button class="btn btn-primary" type="submit">{{ 'Create'|trans({}, 'Estimation') }}</button>
+                </p>
                 {{ form_end(form) }}
             </div>
             <div class="box-footer">
-                        
-        <div class="btn-group record_actions">
+
+                <div class="btn-group record_actions">
 
 
-        </div>
+                </div>
 
             </div>
         </div>

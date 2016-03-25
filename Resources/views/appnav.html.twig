@@ -1,29 +1,26 @@
-		<div class="nav-app">
-            <ul class="nav nav-tabs ">
-                <li role="presentation" class="app-icon">
-                    <img src="{{ asset('bundles/flowercore/images/icons/Engineering-100.png') }}">
-                </li>
-                <li role="presentation" 
-                {% if app_project_overview is defined %}class="active"{% endif %}
-                >
-                    <a href="{{ path('project_dashboard') }}">{{ 'overview'|trans|capitalize }}</a>
-                </li>
-                <li role="presentation" 
-                {% if app_project_list is defined %}class="active"{% endif %}
-                >
-                    <a href="{{ path('project') }}">{{ 'List view'|trans|capitalize }}</a>
-                </li>
-                {% if is_granted('ROLE_ESTIMATIONS') %}   
-                    <li role="presentation" 
-                    {% if app_estimation is defined %}class="active"{% endif %}
-                    >
-                        <a href="{{ path('estimation') }}">{{ 'estimations'|trans|capitalize }}</a>
-                    </li>
-                {% endif %}
-                {% if project is defined and project.id and app_doc is defined %}
-                    <li role="presentation">
-                        <a href="{{ path('project_show',{id:project.id}) }}">{{ 'Project'|trans({},'Project')|capitalize }}</a>
-                    </li>
-                {% endif %}
-            </ul>
+<section class="sidebar">
+    <div class="app-header">
+        <div class="row">
+            <div class="col-sm-12">
+                <img src="{{ asset('bundles/flowercore/images/icons/Engineering-100.png') }}"
+                     class="img-responsive pull-left" width="40">
+                <span>{{ 'projects'|trans|title }}</span>
+            </div>
         </div>
+    </div>
+    <ul class="sidebar-menu">
+
+        <li {% if app_project_overview is defined %}class="active"{% endif %}>
+            <a href="{{ path('project_dashboard') }}">{{ 'kanban'|trans|capitalize }}</a>
+        </li>
+
+        <li {% if app_project_list is defined %}class="active"{% endif %}>
+            <a href="{{ path('project') }}">{{ 'List view'|trans|capitalize }}</a>
+        </li>
+        {% if is_granted('ROLE_ESTIMATIONS') %}
+            <li {% if app_estimation is defined %}class="active"{% endif %}>
+                <a href="{{ path('estimation') }}">{{ 'estimations'|trans|capitalize }}</a>
+            </li>
+        {% endif %}
+    </ul>
+</section>
