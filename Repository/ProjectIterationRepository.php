@@ -21,7 +21,7 @@ class ProjectIterationRepository extends EntityRepository
         , SUM(case when ts.name = 'done' then 1 else 0 end) as done_count");
         $qb->leftJoin("i.tasks", "t");
         $qb->leftJoin("t.timeLogs", "tl");
-        $qb->join("t.status", "ts");
+        $qb->leftjoin("t.status", "ts");
         $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
         $qb->groupBy("i.id");
 

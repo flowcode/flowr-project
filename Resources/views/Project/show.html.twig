@@ -206,7 +206,9 @@
                                                     {{ iteration.spent }}
                                                 </td>
                                                 <td>
+                                                {% if iteration.todo_count+iteration.doing_count+iteration.done_count > 0 %}
                                                     {{ ((iteration.done_count*100)/(iteration.todo_count+iteration.doing_count+iteration.done_count))|number_format }}
+                                                {% endif %}
                                                 </td>
                                                 <td>
                                                     {% if iteration.dueDate %}
