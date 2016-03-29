@@ -7,9 +7,11 @@
 {% endblock %}
 
 {% block body %}
-    <section class="content-header">
-        <h1>{{ 'members'|trans|title }}</h1>
-    </section>
+    <a href="{{ path('project_show',{id:project.id}) }}">
+        <section class="content-header">
+                <h1>{{ project.name|title }}</h1>
+        </section>
+    </a>
     <section class="content">
         <div class="box">
             <div class="box-header">
@@ -19,8 +21,8 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>{{ 'member'|trans|title }}</th>
-                            <th>{{ 'member role'|trans|title }}</th>
+                            <th>{{ 'member'|trans ({}, 'Project') | title }}</th>
+                            <th>{{ 'member role'|trans({}, 'Project')|title }}</th>
                         </tr>
                     </thead>
                     <tbody>

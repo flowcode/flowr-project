@@ -330,58 +330,101 @@ class ProjectController extends Controller
 
 
     /**
-     * Displays a form to create a new Board entity.
+     * Displays a form to create a new TaskFilter entity.
      *
-     * @Route("/iteration/{id}/board/new", name="board_new_to_project_iteration")
+     * @Route("/iteration/{id}/taskFilter/new", name="board_new_to_project_iteration")
      * @Method("GET")
-     * @Template("FlowerBoardBundle:Board:new.html.twig")
+     * @Template("FlowerBoardBundle:TaskFilter:new.html.twig")
      */
     public function newToProjectIterationAction(ProjectIteration $projectIteration)
     {
-        $board = new Board();
+        $taskFilter = new TaskFilter();
         $filter = "project_iteration_id=" . $projectIteration->getId();
-        $board->setFilter($filter);
+        $taskFilter->setFilter($filter);
+        $taskFilter->setOwner($this->getUser());
+        $taskFilter->setProjectIteration($projectIteration);
 
-        $form = $this->createForm($this->get("form.type.board"), $board, array(
-            'action' => $this->generateUrl('board_new_to_project_iteration_create', array("id" => $projectIteration->getId())),
+        $form = $this->createForm($this->get("form.type.taskFilter"), $taskFilter, array(
+            'action' => $this->generateUrl('taskFilter_new_to_project_iteration_create', array("id" => $projectIteration->getId())),
             'method' => 'POST',
         ));
         return array(
-            'board' => $board,
+            'taskFilter' => $taskFilter,
             'form' => $form->createView(),
         );
     }
 
     /**
-     * Creates a new Board entity.
+     * Creates a new taskFilter entity.
      *
-     * @Route("/iteration/{id}/board/create", name="board_new_to_project_iteration_create")
+     * @Route("/iteration/{id}/taskFilter/create", name="taskFilter_new_to_project_iteration_create")
      * @Method("POST")
-     * @Template("FlowerBoardBundle:Board:new.html.twig")
+     * @Template("FlowerBoardBundle:TaskFilter:new.html.twig")
      */
-    public function createIterationBoardAction(Request $request, ProjectIteration $projectIteration)
+    public function createIterationTaskFilterAction(Request $request, ProjectIteration $projectIteration)
     {
-        $board = new Board();
+        $taskFilter = new TaskFilter();
         $filter = "project_iteration_id=" . $projectIteration->getId();
-        $board->setFilter($filter);
-        $board->setProjectIteration($projectIteration);
+        $taskFilter->setFilter($filter);
+        $taskFilter->setOwner($this->getUser());
+        $taskFilter->setProjectIteration($projectIteration);
 
-        $form = $this->createForm($this->get("form.type.board"), $board);
+        $form = $this->createForm($this->get("form.type.taskFilter"), $taskFilter);
         if ($form->handleRequest($request)->isValid()) {
-
             $em = $this->getDoctrine()->getManager();
-            $em->persist($board);
+            $em->persist($taskFilter);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('board_show', array('id' => $board->getId())));
+            return $this->redirect($this->generateUrl('taskFilter_show', array('id' => $board->getId())));
         }
 
         return array(
-            'board' => $board,
+            'taskFilter' => $taskFilter,
             'form' => $form->createView(),
         );
     }
 
+    /**
+     * Edit a new taskFilter entity.
+     *
+     * @Route("/iteration/taskFilter/show/{id}", name="taskFilter_show_to_project_iteration")
+     * @Template("FlowerBoardBundle:TaskFilter:show.html.twig")
+     */
+    public function showIterationTaskFilterAction(Request $request, TaskFilter $taskFilter)
+    {
+
+        $form = $this->createForm($this->get("form.type.taskFilter"), $taskFilter);
+        if ($form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($taskFilter);
+            $em->flush();
+            return $this->redirect($this->generateUrl('taskFilter_show_to_project_iteration', array('id' => $taskFilter->getId())));
+        }
+        $deleteForm = $this->createDeleteForm($taskFilter->getId(), 'taskFilter_delete');
+        return array(
+            'delete_form' => $deleteForm->createView(),
+            'taskFilter' => $taskFilter,
+            'edit_form' => $form->createView(),
+        );
+    }
+
+    /**
+     * Deletes a taskFilter entity.
+     *
+     * @Route("/taskFilter/{id}/delete", name="taskFilter_delete", requirements={"id"="\d+"})
+     * @Method("DELETE")
+     */
+    public function deleteTaskFilterAction(TaskFilter $taskFilter, Request $request)
+    {
+        $projectIteration = $taskFilter->getProjectIteration();
+        $form = $this->createDeleteForm($taskFilter->getId(), 'taskFilter_delete');
+        if ($form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($taskFilter);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('project_iteration_show',array("id" => $projectIteration->getId())));
+    }
     /**
      * Displays a form to create a new Board entity.
      *
@@ -423,6 +466,7 @@ class ProjectController extends Controller
 
         return array(
             'form' => $form->createView(),
+            'project' => $project
         );
     }
 
@@ -443,6 +487,8 @@ class ProjectController extends Controller
 
         return array(
             'form' => $form->createView(),
+            'project' => $projectIteration->getProject(),
+            'projectIteration' => $projectIteration
         );
     }
 
@@ -495,12 +541,15 @@ class ProjectController extends Controller
             "pointHighlightStroke" => "rgba(60,141,188,1)",
             "data" => $dataArr,
         );
-
+        $iterations = $em->getRepository('FlowerModelBundle:Project\ProjectIteration')->findOneWithStats($iteration->getId());
         return array(
             'totalEstimated' => $totalEstimated,
             'burndownPeriod' => $burndownPeriod,
             'burndown' => $burndown,
             'iteration' => $iteration,
+            "countTodo" => $iterations["todo_count"],
+            "countDone" => $iterations["doing_count"],
+            "countInProgress" => $iterations["done_count"],
         );
     }
 

@@ -7,9 +7,11 @@
 {% endblock %}
 
 {% block body %}
-    <section class="content-header">
-        <h1>{{ iteration.project|title }}</h1>
-    </section>
+    <a href="{{ path('project_show',{id:iteration.project.id}) }}">
+        <section class="content-header">
+            <h1>{{ iteration.project.name|title }}</h1>
+        </section>
+    </a>
     <section class="content">
         <div class="box">
             <div class="box-header">
@@ -17,46 +19,15 @@
                     {{ iteration|title }}
                 </h3>
                 <div class="box-tools">
-                    <a href="{{ path('project_iteration_edit', {'id':iteration.id}) }}">
+                    <a class="btn-link btn-sm" href="{{ path('project_iteration_edit', {'id':iteration.id}) }}">
                         {{ 'edit'|trans }}
                     </a>
                 </div>
-                <p>
-                    Project:
-                    <small>
-                        <a href="{{ path('project_show', { 'id': iteration.project.id }) }}">
-                            {{ iteration.project|title }}
-                        </a>
-                    </small>
-                </p>
-                <p>
-                    Start on {{ iteration.startDate|date('y/m/d') }}, end on {{ iteration.dueDate|date('y/m/d') }}.
-                </p>
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="col-sm-12">
-                        <h4>
-                            {{ 'views'|trans|title }}
-                        </h4>
-                        <ul class="list-inline">
-                            {% for filter in iteration.taskFilters %}
-                                <li>
-                                    <a href="{{ path('project_board_task_kanban', {'project_id': iteration.project.id, 'task_filter_id':filter.id}) }}">
-                                        {{ filter.name }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        <a href="{{ path('board_new_to_project_iteration', {'id': iteration.id }) }}"
-                           class="btn btn-linl btn-xs">
-                            <i class="ionicons ion-ios-plus-empty"></i> Add
-                        </a>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-6">
-                        <h4>{{ 'tasks'|trans|title }}</h4>
+                        <h3>{{ 'tasks'|trans|title }}</h3>
                         <table class="table table-condensed">
                             <thead>
                             <tr>
@@ -85,14 +56,56 @@
                         </table>
                     </div>
                     <div class="col-sm-6">
-                        <h4>Burndown</h4>
-                        <div>
-                            <canvas id="burndownChart" height="300"></canvas>
-                        </div>
+                        <h3>
+                            {{ 'views'|trans|title }}
+                        <a href="{{ path('board_new_to_project_iteration', {'id': iteration.id }) }}"
+                           class="btn btn-link btn-xs ">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        </h3>
+                        <table class="table table-condensed">
+                            <thead>
+                            <tbody>
+                            {% for filter in iteration.taskFilters %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('project_board_task_kanban', {'project_id': iteration.project.id, 'task_filter_id':filter.id}) }}">
+                                            {{ filter.name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-xs btn-link" href="{{ path('taskFilter_show_to_project_iteration', {'id':filter.id}) }}">
+                                            {{'show' | trans}}
+                                        </a>
+                                    </td>
+                                    
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="box-footer">
+            </div>
+        </div>
+        <div class="box">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>{{'Burndown' | trans}}</h3>
+                        <div>
+                            <canvas id="burndownChart" height="300"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                    <h3>{{'Status' | trans}}</h3>
+                        <div class="text-center">
+                            <canvas id="statusChart" height="150"></canvas>
+                             <div id="legend"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -135,6 +148,45 @@
             var lineChartCanvas = $("#burndownChart").get(0).getContext("2d");
             lineChart = new Chart(lineChartCanvas).Line(areaChartData, lineChartOptions);
 
+
+            var statusData = [
+                    {
+                        value: {{countTodo}},
+                        color:"#F7464A",
+                        highlight: "#FF5A5E",
+                        label: "{{'Todo' | trans}}" 
+                    },
+                    {
+                        value: {{countDone}},
+                        color: "#46BFBD",
+                        highlight: "#5AD3D1",
+                        label: "{{'Done' | trans}}" 
+                    },
+                    {
+                        value: {{countInProgress}},
+                        color: "#FDB45C",
+                        highlight: "#FFC870",
+                        label: "{{'In Progress' | trans}}" 
+                    }
+                ]
+            statusOptions = {
+                    //Boolean - Whether we should show a stroke on each segment
+                    segmentShowStroke : true,//String - The colour of each segment stroke
+                    segmentStrokeColor : "#fff",//Number - The width of each segment stroke
+                    segmentStrokeWidth : 2,//Number - The percentage of the chart that we cut out of the middle
+                    percentageInnerCutout : 50,// This is 0 for Pie charts
+                    //Number - Amount of animation steps
+                    animationSteps : 100,//String - Animation easing effect
+                    animationEasing : "easeOutBounce",//Boolean - Whether we animate the rotation of the Doughnut
+                    animateRotate : false,//Boolean - Whether we animate scaling the Doughnut from the centre
+                    animateScale : false,//String - A legend template
+                    legendTemplate: '<ul class="list-unstyled <%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){ %><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){ %><%=datasets[i].label%><% }%></li><%}%></ul>'
+
+                }
+            var statusDoughnutChart = $("#statusChart").get(0).getContext("2d");
+            var myDoughnutChart = new Chart(statusDoughnutChart).Doughnut(statusData,statusOptions);
+            myDoughnutChart.generateLegend();
+            $("#legend").html(myDoughnutChart.generateLegend());
         });
     </script>
 {% endblock %}

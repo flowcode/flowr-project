@@ -25,7 +25,7 @@ current month spent: Horas mensuales
 current week spent: Horas semanales
 overall spent: Total registrado
 %procentaje%% of the overall estimated time: %procentaje%% del tiempo estimado.
-Assignee: referente
+Assignee: Referente
 technical_leader: líder técnico
 admin: administrador
 developer: desarrollador
@@ -34,3 +34,9 @@ tester: tester
 project iteration: iteración
 iterations: iteraciones
 iteration.new: nueva iteración
+%entity% members: Miembros del Proyecto
+member: Miembro
+member role: Rol
+Estimated in: Estimado en
+Project type: Tipo de proyecto
+Builded For: Realizado para

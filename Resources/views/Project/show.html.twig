@@ -41,9 +41,9 @@
                         </div>
                     </div>
                     <div class="box-body">
-                        {{ 'Project type'|trans }}: {{ project.type|trans }}.<br>
-                        {{ 'Estimated in '|trans({}, 'Project') }}: {{ project.estimated }} {{ 'hours'|trans }}.<br>
-                        {{ 'Builded For' }}: {{ project.account }}.<br>
+                        {{ 'Project type'|trans({}, 'Project')  }}: {{ project.type|trans }}.<br>
+                        {{ 'Estimated in'|trans({}, 'Project') }}: {{ project.estimated }} {{ 'hours'|trans }}.<br>
+                        {{ 'Builded For'|trans({}, 'Project') }}: {{ project.account }}.<br>
                         <hr>
                         <div>
                             {{ project.description|raw }}
@@ -108,10 +108,7 @@
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
                         <li class="active">
-                            <a href="#events" data-toggle="tab">{{ 'events'|trans|title }}</a>
-                        </li>
-                        <li>
-                            <a href="#members" data-toggle="tab">{{ 'members'|trans|title }}</a>
+                            <a href="#time-tracking" data-toggle="tab">{{ 'stats'|trans|title }}</a>
                         </li>
                         <li>
                             <a href="#iterations" data-toggle="tab">{{ 'iterations'|trans|title }}</a>
@@ -119,14 +116,16 @@
                         <li>
                             <a href="#docs" data-toggle="tab">{{ 'docs'|trans|title }}</a>
                         </li>
-
                         <li>
-                            <a href="#time-tracking" data-toggle="tab">{{ 'stats'|trans|title }}</a>
+                            <a href="#events" data-toggle="tab">{{ 'events'|trans|title }}</a>
+                        </li>
+                        <li>
+                            <a href="#members" data-toggle="tab">{{ 'members'|trans|title }}</a>
                         </li>
                     </ul>
 
                     <div class="tab-content">
-                        <div class="tab-pane active" id="events">
+                        <div class="tab-pane" id="events">
                             <div class="">
                                 <div class="box-header">
                                     <h3 class="box-title">{{ 'next events'|trans|capitalize }}</h3>
@@ -237,7 +236,7 @@
                             </div>
                         </div>
 
-                        <div class="tab-pane" id="time-tracking">
+                        <div class="tab-pane active" id="time-tracking">
                             <div class="">
                                 <div class="box-header">
                                     <h3 class="box-title">{{ 'Project status'|trans|title }}</h3>
@@ -302,8 +301,9 @@
                                                 <a class="users-list-name" href="#">
                                                     {{ member.user.getHappyName() | title }}
                                                 </a>
-                                    <span class="users-list-date {% if project.assignee.id == member.user.id %}text-green{% endif %}">
-                                        {% if project.assignee.id == member.user.id %}
+                                                
+                                    <span class="users-list-date {% if project.assignee != null and member.user != null and  project.assignee.id == member.user.id %}text-green{% endif %}">
+                                        {% if project.assignee != null and  member.assignee != null and project.assignee.id == member.user.id %}
                                             {{ 'assignee'|trans|title }},
                                         {% endif %}
                                         {{ member.memberRole | title }}

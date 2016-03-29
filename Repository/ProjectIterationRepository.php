@@ -28,5 +28,18 @@ class ProjectIterationRepository extends EntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
+    public function findOneWithStats($projectIteration)
+    {
+        $qb = $this->createQueryBuilder("i");
+        $qb->select("i.id, i.name, i.startDate, i.dueDate, i.status, SUM(t.estimated) as estimation, SUM(tl.hours) as spent
+        , SUM(case when ts.name = 'todo' then 1 else 0 end) as todo_count
+        , SUM(case when ts.name = 'doing' then 1 else 0 end) as doing_count
+        , SUM(case when ts.name = 'done' then 1 else 0 end) as done_count");
+        $qb->leftJoin("i.tasks", "t");
+        $qb->leftJoin("t.timeLogs", "tl");
+        $qb->leftjoin("t.status", "ts");
+        $qb->where("i.id = :projectIteration")->setParameter("projectIteration", $projectIteration);
 
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

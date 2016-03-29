@@ -50,7 +50,11 @@
                     {% for project in paginator %}
                         <tr>
                             <td title="{{project.description}}"><a class="btn btn-link" href="{{ path('project_show', {id: project.id}) }}">{{ project.name }}</a></td>
-                            <td>{{ project.assignee.getHappyName() }}</td>
+                            <td>
+                            {% if project.assignee != null %}
+                                {{ project.assignee.getHappyName() }}
+                            {% endif %}
+                            </td>
                             <td>{% if project.finished %}{{ project.finished|date('fullDateTime'|trans) }}{% endif %}</td>
                             <td>{% if project.updated %}{{ project.updated|date('fullDateTime'|trans) }}{% endif %}</td>
                             <td>{% if project.created %}{{ project.created|date('fullDateTime'|trans) }}{% endif %}</td>
