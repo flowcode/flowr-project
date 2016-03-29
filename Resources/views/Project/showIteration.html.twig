@@ -31,9 +31,9 @@
                         <table class="table table-condensed">
                             <thead>
                             <tr>
-                                <th>{{ 'name' }}</th>
-                                <th>{{ 'status' }}</th>
-                                <th>{{ 'estimated' }}</th>
+                                <th>{{ 'Name' | trans({},"ProjectIteration")}}</th>
+                                <th>{{ 'Status' | trans({},"ProjectIteration")}}</th>
+                                <th>{{ 'Estimated' | trans({},"ProjectIteration")}}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-sm-6">
                         <h3>
-                            {{ 'views'|trans|title }}
+                            {{ 'views'|trans({},"ProjectIteration")|title }}
                         <a href="{{ path('board_new_to_project_iteration', {'id': iteration.id }) }}"
                            class="btn btn-link btn-xs ">
                             <i class="fa fa-plus"></i>

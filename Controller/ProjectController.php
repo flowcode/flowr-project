@@ -374,7 +374,7 @@ class ProjectController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($taskFilter);
             $em->flush();
-            return $this->redirect($this->generateUrl('taskFilter_show', array('id' => $board->getId())));
+            return $this->redirect($this->generateUrl('taskFilter_show_to_project_iteration', array('id' => $taskFilter->getId())));
         }
 
         return array(
