@@ -16,7 +16,9 @@ class DocPageType extends AbstractType
         $builder
         
             ->add('title')
-            ->add('content', null, array('attr' => array('class' => 'textarea-wysihtml5')))
+            ->add('content', 'ckeditor', array(
+                'required' => false
+            ))
             ->add('project')
         ;
     }

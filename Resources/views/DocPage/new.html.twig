@@ -1,10 +1,17 @@
 {% extends "FlowerCoreBundle::layout.html.twig" %}
 
 {% block title %}{{ '%entity% creation'|trans({'%entity%': 'DocPage'}, 'DocPage') }} - {{ parent() }}{% endblock %}
+{% block app_menu %}
+        {{ include("FlowerProjectBundle::appnav.html.twig", {'project' :project, 'app_doc':true}) }} 
+{% endblock %}
 
 {% block body %}
+    <a href="{{ path('project_show',{id:project.id}) }}">
+        <section class="content-header">
+                <h1>{{ project.name|title }}</h1>
+        </section>
+    </a>
     <section class="content">
-        {{ include("FlowerProjectBundle::appnav.html.twig", {'project' :project, 'app_doc':true}) }} 
         <div class="box">
             <div class="box-header">
                 <h3 class="box-title">{{ '%entity% creation'|trans({'%entity%': 'DocPage'}, 'DocPage') }}</h3>

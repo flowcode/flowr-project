@@ -127,7 +127,7 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="events">
-                            <div class="box">
+                            <div class="">
                                 <div class="box-header">
                                     <h3 class="box-title">{{ 'next events'|trans|capitalize }}</h3>
                                     <div class="box-tools">
@@ -159,13 +159,13 @@
                         </div>
 
                         <div class="tab-pane" id="iterations">
-                            <div class="box">
+                            <div class="">
                                 <div class="box-header">
                                     <h3 class="box-title">{{ 'iterations'|trans|title }}</h3>
                                     <div class="box-tools">
                                         <a class="btn btn-link"
                                            href="{{ path('project_iteration_new', { "id": project.id }) }}">
-                                            <i class="ionicons ion-ios-plus-empty"></i> {{ 'add'|trans }}
+                                            <i class="fa fa-plus"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -238,13 +238,16 @@
                         </div>
 
                         <div class="tab-pane" id="time-tracking">
-                            <div class="box box-solid">
+                            <div class="">
+                                <div class="box-header">
+                                    <h3 class="box-title">{{ 'Project status'|trans|title }}</h3>
+                                </div>
                                 <div class="box-body">
                                     <table class="table table-condensed">
                                         <thead>
                                         <tr>
                                             <th>{{ 'time tracking stats'|trans|title }}</th>
-                                            <th>Hours</th>
+                                            <th>{{'Hours' | trans}}</th>
                                             <th></th>
                                         </tr>
                                         </thead>
@@ -280,7 +283,7 @@
                         </div>
 
                         <div class="tab-pane" id="members">
-                            <div class="box">
+                            <div class="">
 
                                 <div class="box-header">
                                     <h3 class="box-title">{{ 'members'|trans|title }}</h3>
@@ -312,16 +315,15 @@
                                 <div class="box-footer">
                                     <a class="btn btn-link"
                                        href="{{ path('project_members_full', { "id": project.id }) }}">
-                                        View All
+                                        {{'View All' | trans}}
                                     </a>
                                 </div>
                             </div>
                         </div>
 
                         <div class="tab-pane" id="docs">
-                            <div class="box">
+                            <div class="">
                                 <div class="box-header">
-                                    <i class="fa fa-info-circle"></i>
                                     <h3 class="box-title">{{ 'Docs'|trans({},'Project') }}</h3>
                                     <div class="box-tools">
                                         <a href="{{ path('docpage_add_toproj', {id:project.id}) }}">
