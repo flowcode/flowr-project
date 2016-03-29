@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * ProjectIteration
@@ -25,6 +26,7 @@ class ProjectIteration
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"search", "public_api"})
      */
     protected $id;
 
@@ -38,6 +40,7 @@ class ProjectIteration
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"search", "public_api"})
      */
     protected $name;
 
@@ -45,6 +48,7 @@ class ProjectIteration
      * @var \DateTime
      *
      * @ORM\Column(name="startDate", type="datetime", nullable=true))
+     * @Groups({"search", "public_api"})
      */
     protected $startDate;
 
@@ -52,6 +56,7 @@ class ProjectIteration
      * @var \DateTime
      *
      * @ORM\Column(name="dueDate", type="datetime", nullable=true))
+     * @Groups({"search", "public_api"})
      */
     protected $dueDate;
 
@@ -59,6 +64,7 @@ class ProjectIteration
      * @var integer
      *
      * @ORM\Column(name="status", type="integer")
+     * @Groups({"search", "public_api"})
      */
     protected $status;
 

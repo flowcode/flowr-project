@@ -38,7 +38,7 @@ class ProjectService implements ContainerAwareInterface
     public function findAll()
     {
         $alias = 'p';
-        $qb = $this->entityManager->getRepository()->findAllQb();
+        $qb = $this->entityManager->getRepository('FlowerModelBundle:Project\Project')->findAllQb();
         $orgPositionSrv = $this->container->get('user.service.orgposition');
         $user = $this->container->get('security.context')->getToken()->getUser();
 

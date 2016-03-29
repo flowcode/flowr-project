@@ -15,8 +15,8 @@ class ProjectController extends FOSRestController
 {
     public function getAllAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $projects = $em->getRepository('FlowerModelBundle:Project\Project')->findAll();
+        $projectSrv = $this->get('flower.project');
+        $projects = $projectSrv->findAll();
 
         $view = FOSView::create($projects, Codes::HTTP_OK)->setFormat('json');
         $view->getSerializationContext()->setGroups(array('public_api'));
@@ -54,7 +54,7 @@ class ProjectController extends FOSRestController
             'overallSpent' => $overallSpent,
             'monthSpent' => $monthSpent,
             'weekSpent' => $weekSpent,
-            'projectBoards' => $project->getBoards(),
+            'projectIterations' => $project->getIterations(),
             'overallSpentRatio' => $spentPercentage,
         );
 
