@@ -548,8 +548,8 @@ class ProjectController extends Controller
             'burndown' => $burndown,
             'iteration' => $iteration,
             "countTodo" => $iterations["todo_count"],
-            "countDone" => $iterations["doing_count"],
-            "countInProgress" => $iterations["done_count"],
+            "countDone" => $iterations["done_count"],
+            "countInProgress" => $iterations["doing_count"],
         );
     }
 
