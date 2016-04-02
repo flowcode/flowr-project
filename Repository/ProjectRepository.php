@@ -23,6 +23,12 @@ class ProjectRepository extends EntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findAllActive()
+    {
+        $qb = $this->findAllQb();
+        return $qb->getQuery()->getResult();
+    }
+
     public function findAllQb($alias = 'p', $enabled = true)
     {
         $qb = $this->createQueryBuilder($alias);
