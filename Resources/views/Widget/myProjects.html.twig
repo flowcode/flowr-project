@@ -23,7 +23,7 @@
                            title="{{ project.status|trans }}"></i>
                     {% endif %}
 
-                    <a href="#">
+                    <a href="{{ path('project_show', {id: project.id}) }}">
                         {{ project }}
                     </a>
                 </li>

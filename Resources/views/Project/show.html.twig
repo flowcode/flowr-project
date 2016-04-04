@@ -303,7 +303,7 @@
                                                 </a>
                                                 
                                     <span class="users-list-date {% if project.assignee != null and member.user != null and  project.assignee.id == member.user.id %}text-green{% endif %}">
-                                        {% if project.assignee != null and  member.assignee != null and project.assignee.id == member.user.id %}
+                                        {% if project.assignee != null and project.assignee.id == member.user.id %}
                                             {{ 'assignee'|trans|title }},
                                         {% endif %}
                                         {{ member.memberRole | title }}
