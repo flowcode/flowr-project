@@ -50,6 +50,23 @@ class ProjectService implements ContainerAwareInterface
         return $qb->getQuery()->getResult();
     }
 
+    public function findMineActives()
+    {
+        $alias = 'p';
+        $qb = $this->entityManager->getRepository('FlowerModelBundle:Project\Project')->findAllQb();
+        $qb->join("p.status", "ps");
+        $qb->andWhere("ps.name NOT IN (:inactives)")->setParameter("inactives", array("status_finished"));
+        
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $qb->join($alias . ".members", "m", "with", "1=1");
+        $qb->andWhere("( p.assignee = :assignee OR m.user = :member)")
+            ->setParameter('assignee', $user)
+            ->setParameter(":member", $user);
+
+        return $qb->getQuery()->getResult();
+    }
+
     public function findByStatus(ProjectStatus $projectStatus)
     {
         $alias = 'p';

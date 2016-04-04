@@ -1,0 +1,36 @@
+<div class="box box-solid">
+    <div class="box-header">
+        <i class="ion ion-clipboard"></i>
+        <h3 class="box-title">{{ 'my projects'|trans|capitalize }}</h3>
+        <div class="box-tools pull-right">
+        </div>
+    </div>
+    <div class="box-body">
+        <ul class="list-unstyled">
+            {% for project in myProjects %}
+                <li>
+                    {% if project.status == 'status_backlog' %}
+                        <i class="ionicons ion-ios-circle-filled text-yellow"
+                           title="{{ project.status|trans }}"></i>
+                    {% elseif project.status == 'status_in_progress' %}
+                        <i class="ionicons ion-ios-circle-filled text-green"
+                           title="{{ project.status|trans }}"></i>
+                    {% elseif project.status == 'status_testing' %}
+                        <i class="ionicons ion-ios-circle-filled text-fuchsia"
+                           title="{{ project.status|trans }}"></i>
+                    {% else %}
+                        <i class="ionicons ion-ios-circle-outline text-muted"
+                           title="{{ project.status|trans }}"></i>
+                    {% endif %}
+
+                    <a href="#">
+                        {{ project }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="box-footer">
+
+    </div>
+</div><!-- /.box -->
