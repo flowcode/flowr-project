@@ -1,0 +1,11 @@
+flower_project_api_public_getbyaccount:
+    path:     /account/{accountId}
+    defaults: { _controller: FlowerProjectBundle:Api\ProjectPublic:getByAccount }
+
+flower_project_api_public_getone:
+    path:     /{id}
+    defaults: { _controller: FlowerProjectBundle:Api\ProjectPublic:getById }
+
+flower_project_api_public_getall:
+    path:     /
+    defaults: { _controller: FlowerProjectBundle:Api\ProjectPublic:getAll }
