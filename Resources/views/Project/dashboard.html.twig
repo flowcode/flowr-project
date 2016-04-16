@@ -30,12 +30,22 @@
                                         <div class="box box-solid bg-postit {% if project.type == 'ongoing' %}bg-aqua{% endif %}">
                                             <div class="box-header">
                                                 <a class="box-title"
-                                                   href="{{ path('project_show', {id: project.id}) }}">{{ project.name|capitalize }}</a>
+                                                   href="{{ path('project_show', {id: project.id}) }}">
+                                                    {{ project.name|capitalize }}
+                                                </a>
                                             </div>
-                                            <div class="box-body">
+                                            <div class="box-body project-members">
+                                                <div class="row">
+                                                    <div class="col-sm-10">
+                                                        {% for member in project.members %}
+                                                            {{ include('FlowerUserBundle:User:avatar_light.html.twig',{user:member.user}) }}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        {{ project.dailyWorkingHours }}
+                                                    </div>
+                                                </div>
 
-
-                                                <span class="label label-default">{{ project.account }}</span>
                                             </div>
                                         </div>
                                     </li>
