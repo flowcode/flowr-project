@@ -2,6 +2,10 @@
 
 {% block title %}{{ '%entity% edit'|trans({'%entity%': 'Project'}, 'Project') }} - {{ parent() }}{% endblock %}
 
+{% block app_menu %}
+    {{ include("FlowerProjectBundle::appnav.html.twig", { 'app_project_list': true }) }}
+{% endblock %}
+
 {% block body %}
     {{ include("FlowerProjectBundle:Project:header.html.twig", { 'project': projectMembership.project }) }}
     <section class="content">

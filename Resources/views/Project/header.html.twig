@@ -1,11 +1,11 @@
 <section class="content-header">
     <h1>
         {% if project.account %}
-            <a href="{{ path('account_show', { 'id': project.account.id }) }}">{{ project.account|capitalize }}</a>
+            <a href="{{ path('account_show', { 'id': project.account.id }) }}">{{ project.account|title }}</a>
             <i class="fa fa-angle-right"></i>
         {% endif %}
         {% if project and project.id != "" %}
-            <a href="{{ path('project_show', { 'id': project.id }) }}">{{ project|capitalize }}</a>
+            <a href="{{ path('project_show', { 'id': project.id }) }}">{{ project|title }}</a>
         {% endif %}
     </h1>
 </section>
