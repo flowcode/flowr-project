@@ -55,7 +55,7 @@ class ProjectMembershipController extends Controller
      *
      * @Route("/{id}/addmember", name="project_add_member")
      * @Method("GET")
-     * @Template()
+     * @Template("FlowerProjectBundle:ProjectMembership:addmember.html.twig")
      */
     public function addMemberAction(Request $request, Project $project)
     {
@@ -79,7 +79,7 @@ class ProjectMembershipController extends Controller
      *
      * @Route("/{id}/addmember", name="project_add_member_save")
      * @Method("POST")
-     * @Template("FlowerProjectBundle:Project:addmember.html.twig")
+     * @Template("FlowerProjectBundle:ProjectMembership:addmember.html.twig")
      */
     public function addMemberSaveAction(Request $request, Project $project)
     {
@@ -121,10 +121,13 @@ class ProjectMembershipController extends Controller
             'action' => $this->generateUrl('project_member_update', array('id' => $projectMembership->getid())),
             'method' => 'PUT',
         ));
+        $deleteForm = $this->createDeleteForm($projectMembership->getId(), 'project_member_delete');
+
 
         return array(
             'projectMembership' => $projectMembership,
             'form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -156,6 +159,24 @@ class ProjectMembershipController extends Controller
             'projectMembership' => $projectMembership,
             'form' => $editForm->createView(),
         );
+    }
+    /**
+     * Deletes a ProjectMembership entity.
+     *
+     * @Route("/projectmembership/{id}/delete", name="project_member_delete", requirements={"id"="\d+"})
+     * @Method("DELETE")
+     */
+    public function deleteProjectMembershipAction(ProjectMembership $membership, Request $request)
+    {
+        $projectId = $membership->getProject()->getId();
+        $form = $this->createDeleteForm($membership->getId(), 'project_member_delete');
+        if ($form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($membership);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('project_members_full',array("id" => $projectId)));
     }
 
     /**
