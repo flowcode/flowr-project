@@ -142,7 +142,8 @@ class ProjectController extends Controller
         $nextEvents = $em->getRepository('FlowerModelBundle:Planner\Event')->findBy(array("project" => $project), array("startDate" => "ASC"), 5);
 
         /* iterations */
-        $iterations = $em->getRepository('FlowerModelBundle:Project\ProjectIteration')->findWithStats($project->getId());
+
+        $iterations = $this->get('flower.project')->findWithStats($project);
 
         return array(
             'edit_form' => $editForm->createView(),
@@ -534,7 +535,9 @@ class ProjectController extends Controller
             }
 
         }
+        $tasksWithSpent = $em->getRepository('FlowerModelBundle:Board\Task')->getTaskWithSpent($iteration);
 
+            
         $burndown = array(
             "label" => "Work",
             "fillColor" => "rgba(60,141,188,0.9)",
@@ -550,6 +553,7 @@ class ProjectController extends Controller
             'totalEstimated' => $totalEstimated,
             'burndownPeriod' => $burndownPeriod,
             'burndown' => $burndown,
+            'tasks' => $tasksWithSpent,
             'iteration' => $iteration,
             "countTodo" => $iterations["todo_count"],
             "countDone" => $iterations["done_count"],

@@ -15,16 +15,27 @@ class ProjectIterationRepository extends EntityRepository
     public function findWithStats($projectId)
     {
         $qb = $this->createQueryBuilder("i");
-        $qb->select("i.id, i.name, i.startDate, i.dueDate, i.status, SUM(t.estimated) as estimation, SUM(tl.hours) as spent
+        $qb->select("i.id, i.name, i.startDate, i.dueDate, i.status, SUM(t.estimated) as estimation
         , SUM(case when ts.name = 'todo' then 1 else 0 end) as todo_count
         , SUM(case when ts.name = 'doing' then 1 else 0 end) as doing_count
         , SUM(case when ts.name = 'done' then 1 else 0 end) as done_count");
         $qb->leftJoin("i.tasks", "t");
-        $qb->leftJoin("t.timeLogs", "tl");
         $qb->leftjoin("t.status", "ts");
         $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
-        $qb->groupBy("i.id");
+        $qb->groupBy("i.id")
+        ->orderBy("i.id");
+        return $qb->getQuery()->getArrayResult();
+    }
 
+    public function findSpentByProject($projectId)
+    {
+        $qb = $this->createQueryBuilder("i");
+        $qb->select("SUM(tl.hours) as spent");
+        $qb->leftJoin("i.tasks", "t");
+        $qb->leftJoin("t.timeLogs", "tl");
+        $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
+        $qb->groupBy("i.id")
+        ->orderBy("i.id");
         return $qb->getQuery()->getArrayResult();
     }
 

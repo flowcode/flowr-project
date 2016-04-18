@@ -83,7 +83,14 @@ class ProjectService implements ContainerAwareInterface
 
         return $qb->getQuery()->getResult();
     }
-
+    public function findWithStats($project){
+        $iterationswithStatus = $this->entityManager->getRepository('FlowerModelBundle:Project\ProjectIteration')->findWithStats($project->getId());
+        $iterationsSpents = $this->entityManager->getRepository('FlowerModelBundle:Project\ProjectIteration')->findSpentByProject($project->getId());
+        for ($i=0; $i < count($iterationsSpents); $i++) { 
+           $iterationswithStatus[$i]["spent"] = $iterationsSpents[$i]["spent"];         
+        }
+        return $iterationswithStatus;
+    }
     public function getBoardsWithStadistics($project)
     {
         $em = $this->getEntityManager();
