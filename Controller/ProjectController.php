@@ -53,7 +53,11 @@ class ProjectController extends Controller
         foreach ($projStatuses as $projStatus) {
             $status = array();
             $status["entity"] = $projStatus;
+            $status["sum_hours"] = 0;
             $status["projects"] = $projectSrv->findByStatus($projStatus);
+            foreach ($status["projects"] as $project){
+                $status["sum_hours"] += $project->getDailyWorkingHours();
+            }
             $projects[] = $status;
         }
 

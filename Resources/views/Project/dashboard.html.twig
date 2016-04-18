@@ -23,7 +23,13 @@
                 <div class="row">
                     {% for status in projects %}
                         <div class="col-md-3">
-                            <h4>{{ status.entity.name|trans|capitalize }}</h4>
+                            <h4>
+                                {{ status.entity.name|trans|capitalize }}
+                                ({{ status.projects|length }})
+                            </h4>
+                            <small>
+                                {{ status.sum_hours }} horas en total.
+                            </small>
                             <ul class="list-unstyled sortable">
                                 {% for project in status.projects %}
                                     <li class="card">
