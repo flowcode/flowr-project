@@ -56,7 +56,7 @@ class ProjectService implements ContainerAwareInterface
         $qb = $this->entityManager->getRepository('FlowerModelBundle:Project\Project')->findAllQb();
         $qb->join("p.status", "ps");
         $qb->andWhere("ps.name NOT IN (:inactives)")->setParameter("inactives", array("status_finished"));
-        
+
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $qb->join($alias . ".members", "m", "with", "1=1");
@@ -83,14 +83,17 @@ class ProjectService implements ContainerAwareInterface
 
         return $qb->getQuery()->getResult();
     }
-    public function findWithStats($project){
+
+    public function findWithStats($project)
+    {
         $iterationswithStatus = $this->entityManager->getRepository('FlowerModelBundle:Project\ProjectIteration')->findWithStats($project->getId());
         $iterationsSpents = $this->entityManager->getRepository('FlowerModelBundle:Project\ProjectIteration')->findSpentByProject($project->getId());
-        for ($i=0; $i < count($iterationsSpents); $i++) { 
-           $iterationswithStatus[$i]["spent"] = $iterationsSpents[$i]["spent"];         
+        for ($i = 0; $i < count($iterationsSpents); $i++) {
+            $iterationswithStatus[$i]["spent"] = $iterationsSpents[$i]["spent"];
         }
         return $iterationswithStatus;
     }
+
     public function getBoardsWithStadistics($project)
     {
         $em = $this->getEntityManager();

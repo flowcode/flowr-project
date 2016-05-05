@@ -23,7 +23,7 @@ class ProjectIterationRepository extends EntityRepository
         $qb->leftjoin("t.status", "ts");
         $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
         $qb->groupBy("i.id")
-        ->orderBy("i.id");
+        ->orderBy("i.startDate");
         return $qb->getQuery()->getArrayResult();
     }
 
@@ -35,7 +35,7 @@ class ProjectIterationRepository extends EntityRepository
         $qb->leftJoin("t.timeLogs", "tl");
         $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
         $qb->groupBy("i.id")
-        ->orderBy("i.id");
+        ->orderBy("i.startDate");
         return $qb->getQuery()->getArrayResult();
     }
 
