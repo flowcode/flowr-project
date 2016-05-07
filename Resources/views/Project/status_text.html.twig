@@ -1,0 +1,17 @@
+{% if status == 'status_backlog' %}
+    <span class="text-muted">
+        {{ status|trans }}
+    </span>
+{% elseif status == 'status_in_progress' %}
+    <span class="text-success">
+        {{ status|trans }}
+    </span>
+{% elseif status == 'status_testing' %}
+    <span class="text-warning">
+        {{ status|trans }}
+    </span>
+{% else %}
+    <span class="text-muted">
+        {{ status|trans }}
+    </span>
+{% endif %}

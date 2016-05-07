@@ -72,6 +72,13 @@ class Estimation
     protected $project;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="client_viewable", type="boolean")
+     */
+    protected $clientViewable;
+
+    /**
      * @OneToMany(targetEntity="\Flower\ModelBundle\Entity\Project\EstimationItem", mappedBy="estimation")
      * */
     protected $items;
@@ -79,6 +86,7 @@ class Estimation
     function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->clientViewable = false;
     }
 
     /**
@@ -288,5 +296,21 @@ class Estimation
     public function getOpportunity()
     {
         return $this->opportunity;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isClientViewable()
+    {
+        return $this->clientViewable;
+    }
+
+    /**
+     * @param boolean $clientViewable
+     */
+    public function setClientViewable($clientViewable)
+    {
+        $this->clientViewable = $clientViewable;
     }
 }

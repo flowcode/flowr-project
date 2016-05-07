@@ -25,22 +25,22 @@ class ProjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('name')
-                ->add('description', null, array('required' => false))
-                ->add('assignee')
-                ->add('dailyWorkingHours', null, array('required' => false))
-                ->add('estimated', null, array('required' => false))
-                ->add('finished', null, array('required' => false))
-                ->add('enabled', null, array('required' => false))
-                ->add('type', 'choice', array(
-                    'choices' => array(
-                        Project::type_fixed => 'fixed',
-                        Project::type_ongoing => 'ongoing',
-                    )
-                ))
-                ->add('account')
-                ->add('status')
-        ;
+            ->add('name')
+            ->add('description', null, array('required' => false))
+            ->add('assignee')
+            ->add('dailyWorkingHours', null, array('required' => false))
+            ->add('estimated', null, array('required' => false))
+            ->add('finished', null, array('required' => false))
+            ->add('enabled', null, array('required' => false))
+            ->add('type', 'choice', array(
+                'choices' => array(
+                    Project::type_fixed => 'fixed',
+                    Project::type_ongoing => 'ongoing',
+                )
+            ))
+            ->add('account')
+            ->add('clientViewable')
+            ->add('status');
     }
 
     /**

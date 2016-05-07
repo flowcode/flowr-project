@@ -153,9 +153,17 @@ class Project
      */
     protected $enabled;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="client_viewable", type="boolean")
+     */
+    protected $clientViewable;
+
     function __construct()
     {
         $this->enabled = true;
+        $this->clientViewable = false;
         $this->docPages = new ArrayCollection();
         $this->members = new ArrayCollection();
         $this->iterations = new ArrayCollection();
@@ -588,5 +596,21 @@ class Project
         $this->iterations = $iterations;
     }
 
+    /**
+     * @return boolean
+     */
+    public function isClientViewable()
+    {
+        return $this->clientViewable;
+    }
+
+    /**
+     * @param boolean $clientViewable
+     */
+    public function setClientViewable($clientViewable)
+    {
+        $this->clientViewable = $clientViewable;
+    }
+    
 
 }

@@ -22,6 +22,7 @@ class EstimationType extends AbstractType
             ->add('opportunity')
             ->add('account')
             ->add('project')
+            ->add('clientViewable')
         ;
     }
 
