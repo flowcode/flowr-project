@@ -46,7 +46,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <span>{{ task.task.status }}</span>
+                                        {{ include('FlowerBoardBundle:Task:status_text.html.twig',{'status':task.task.status}) }}
                                     </td>
                                     <td>
                                         <span>{{ task.task.estimated }}</span>

@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProjectIterationRepository extends EntityRepository
 {
-    public function findWithStats($projectId)
+    public function findWithStats($projectId, $clientView = false)
     {
         $qb = $this->createQueryBuilder("i");
         $qb->select("i.id, i.name, i.startDate, i.dueDate, i.status, SUM(t.estimated) as estimation
@@ -22,20 +22,27 @@ class ProjectIterationRepository extends EntityRepository
         $qb->leftJoin("i.tasks", "t");
         $qb->leftjoin("t.status", "ts");
         $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
+        if ($clientView) {
+            $qb->andWhere('i.clientViewable = :client_view')->setParameter('client_view', true);
+        }
         $qb->groupBy("i.id")
-        ->orderBy("i.startDate");
+            ->orderBy("i.startDate");
         return $qb->getQuery()->getArrayResult();
     }
 
-    public function findSpentByProject($projectId)
+    public function findSpentByProject($projectId, $clientView = false)
     {
         $qb = $this->createQueryBuilder("i");
         $qb->select("SUM(tl.hours) as spent");
         $qb->leftJoin("i.tasks", "t");
         $qb->leftJoin("t.timeLogs", "tl");
         $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
+        $qb->where("i.project = :project_id")->setParameter("project_id", $projectId);
+        if ($clientView) {
+            $qb->andWhere('i.clientViewable = :client_view')->setParameter('client_view', true);
+        }
         $qb->groupBy("i.id")
-        ->orderBy("i.startDate");
+            ->orderBy("i.startDate");
         return $qb->getQuery()->getArrayResult();
     }
 

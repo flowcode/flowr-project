@@ -23,6 +23,7 @@ class ProjectIterationType extends AbstractType
                     2 => "done",
                 ),
             ))
+            ->add('clientViewable')
             ->add('startDate', 'collot_datetime', array('required' => false,
                 'pickerOptions' =>
                     array('format' => 'dd/mm/yyyy  hh:ii',

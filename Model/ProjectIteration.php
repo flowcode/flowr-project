@@ -78,9 +78,17 @@ class ProjectIteration
      */
     protected $taskFilters;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="client_viewable", type="boolean")
+     */
+    protected $clientViewable;
+
 
     public function __construct()
     {
+        $this->clientViewable = false;
         $this->tasks = new ArrayCollection();
         $this->taskFilters = new ArrayCollection();
     }
@@ -234,6 +242,24 @@ class ProjectIteration
     {
         $this->taskFilters = $taskFilters;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isClientViewable()
+    {
+        return $this->clientViewable;
+    }
+
+    /**
+     * @param boolean $clientViewable
+     */
+    public function setClientViewable($clientViewable)
+    {
+        $this->clientViewable = $clientViewable;
+    }
+
+
 
 
 }
