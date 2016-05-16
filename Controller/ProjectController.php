@@ -144,7 +144,6 @@ class ProjectController extends Controller
         /* iterations */
 
         $iterations = $this->get('flower.project')->findWithStats($project);
-
         return array(
             'edit_form' => $editForm->createView(),
             'project' => $project,

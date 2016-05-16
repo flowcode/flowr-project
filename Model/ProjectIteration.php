@@ -19,6 +19,7 @@ class ProjectIteration
     const status_pending = 0;
     const status_active = 1;
     const status_done = 2;
+    const status_archived = 9;
 
     /**
      * @var integer

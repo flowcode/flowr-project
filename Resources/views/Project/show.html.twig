@@ -8,7 +8,7 @@
 
 {% block body %}
     <section class="content-header">
-        <h1>{{ project.name|title }}</h1>
+        <h1>{{ project.name }}</h1>
     </section>
     <section class="content">
         <div class="row">
@@ -169,6 +169,9 @@
                                     </div>
                                 </div>
                                 <div class="box-body">
+                                <small>
+                                    <a href="#" id="show-archives-iterations">Mostrar archivados</a>
+                                </small>
                                     <table class="table table-condensed">
                                         <tr>
                                             <th>{{ 'name'|trans|title }}</th>
@@ -180,7 +183,12 @@
                                             <th></th>
                                         </tr>
                                         {% for iteration in iterations %}
-                                            <tr>
+                                            {% if iteration.status == 9  %}
+                                                <tr class="archived" style="display: none;">
+                                            {% else %}
+                                                <tr>    
+                                            {% endif %}
+                                            
                                                 <td>
                                                     {% set iteration_status_class = '' %}
                                                     {% set iteration_status_msg = 'done' %}
@@ -375,5 +383,8 @@
             }
         }
 
+        $("#show-archives-iterations").click(function(){
+            $(".archived").toggle();
+        })
     </script>
 {% endblock %}

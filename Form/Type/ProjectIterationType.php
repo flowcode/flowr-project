@@ -5,6 +5,7 @@ namespace Flower\ProjectBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Flower\ProjectBundle\Model\ProjectIteration;
 
 class ProjectIterationType extends AbstractType
 {
@@ -18,9 +19,10 @@ class ProjectIterationType extends AbstractType
             ->add('project')
             ->add('status', 'choice', array(
                 'choices' => array(
-                    0 => "pending",
-                    1 => "active",
-                    2 => "done",
+                    ProjectIteration::status_pending => "pending",
+                    ProjectIteration::status_active => "active",
+                    ProjectIteration::status_done => "done",
+                    ProjectIteration::status_archived => "archived",
                 ),
             ))
             ->add('clientViewable')
