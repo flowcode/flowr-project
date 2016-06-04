@@ -16,7 +16,7 @@ class ProjectPublicController extends FOSRestController
     public function getAllAction(Request $request)
     {
         $projectSrv = $this->get('flower.project');
-        $projects = $projectSrv->findAll();
+        $projects = $projectSrv->findAll($request->get('q'));
 
         $view = FOSView::create($projects, Codes::HTTP_OK)->setFormat('json');
         $view->getSerializationContext()->setGroups(array('public_api'));

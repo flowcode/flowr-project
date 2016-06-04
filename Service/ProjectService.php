@@ -35,7 +35,7 @@ class ProjectService implements ContainerAwareInterface
         $this->entityManager = $this->container->get("doctrine.orm.entity_manager");
     }
 
-    public function findAll()
+    public function findAll($filter = null)
     {
         $alias = 'p';
         $qb = $this->entityManager->getRepository('FlowerModelBundle:Project\Project')->findAllQb();
@@ -43,6 +43,11 @@ class ProjectService implements ContainerAwareInterface
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $qb->join($alias . ".members", "m", "with", "1=1");
+
+        if ($filter) {
+            $qb->andWhere('p.name LIKE :name')->setParameter(':name', '%' . $filter . '%');
+        }
+
         $qb->andWhere("( p.assignee IN (:users) OR m.user IN (:members))")
             ->setParameter('users', $orgPositionSrv->getLowerPositionUsers($user, true))
             ->setParameter(":members", $orgPositionSrv->getLowerPositionUsers($user, true));
